@@ -11,6 +11,17 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "paths": {
+      "bibliolib-gallery": [
+        "dist/bibliolib-gallery"
+      ],
+      "ng-gallery-r": [
+        "dist/ng-gallery-r"
+      ],
+      "ngx-gallery-r": [
+        "dist/ngx-gallery-r"
+      ]
+    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
