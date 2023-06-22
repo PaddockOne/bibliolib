@@ -5,7 +5,7 @@ Simple social media gallery for angular apps.
 ## Installation
 
 ```bash
-npm install bibliolib
+npm install bibliolib-gallery
 ```
 
 ## Usage

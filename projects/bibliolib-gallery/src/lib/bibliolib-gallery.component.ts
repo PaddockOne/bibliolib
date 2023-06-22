@@ -40,6 +40,7 @@ import { Component, Input } from '@angular/core';
     .gallery {
       width: 100%;
       gap: 0.3em;
+      box-sizing: border-box;
     }
     .gallery>.img-wrapper {
       cursor: pointer;
@@ -142,6 +143,7 @@ import { Component, Input } from '@angular/core';
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-sizing: border-box;
     }
     .gallery-zoom>img {
         max-height: calc(100vh - 2.5em);
