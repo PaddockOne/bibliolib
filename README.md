@@ -1,27 +1,57 @@
 # Bibliolib
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.4.
+Simple social media gallery for angular apps.
 
-## Development server
+## Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+npm install bibliolib
+```
 
-## Code scaffolding
+## Usage
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Import the module in your app module:
 
-## Build
+```typescript
+import { BibliolibModule } from "bibliolib";
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, BibliolibModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
 
-## Running unit tests
+Use the component in your app:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```html
+<bibliolib [photoList]="images" [currentPhotoZoomGallery]="zoomImages"></bibliolib>
+```
 
-## Running end-to-end tests
+```typescript
+import { Component } from "@angular/core";
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+@Component({
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
+})
+export class AppComponent {
+  // List of urls images to display
+  images: string[] = ["url1", "url2"];
+  // list of urls images to display in zoom gallery (optional)
+  // if not provided, the zoom gallery will display the same images as the main gallery
+  zoomImages: string[] = ["url1", "url2"];
 
-## Further help
+  constructor() {}
+}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## License
+MIT
+
+## Author
+@reyvaxreecded
+

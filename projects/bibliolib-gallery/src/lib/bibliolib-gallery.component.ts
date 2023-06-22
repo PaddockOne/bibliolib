@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'lib-bibliolib-gallery',
+  selector: 'bibliolib-gallery',
   template: `
       <article
         class="gallery"
@@ -187,7 +187,7 @@ import { Component, Input } from '@angular/core';
   ]
 })
 export class BibliolibGalleryComponent {
-  @Input() photoList!: string[];
+  @Input({required: true}) photoList!: string[];
   @Input() currentPhotoZoomGallery!: string[];
 
   currentPhotoZoom: number = 0;
