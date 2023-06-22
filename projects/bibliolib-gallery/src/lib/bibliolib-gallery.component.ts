@@ -189,7 +189,19 @@ import { Component, Input } from '@angular/core';
   ]
 })
 export class BibliolibGalleryComponent {
-  @Input({required: true}) photoList!: string[];
+  /**
+  * @required
+  * Specify a list of photos to display in the gallery.
+  * @type string[]
+  */
+  @Input({ required: true }) photoList!: string[];
+  /**
+  * @optional
+  * Specify a list of photos to display in the zoom carousel.
+  *
+  * If not specified, the list of photos will be the same as the list of photos in the gallery.
+  * @type string[]
+  */
   @Input() currentPhotoZoomGallery!: string[];
 
   currentPhotoZoom: number = 0;

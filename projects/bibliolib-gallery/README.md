@@ -1,4 +1,4 @@
-# Bibliolib
+# Bibliolib-gallery
 
 Simple social media gallery for angular apps.
 
@@ -53,5 +53,5 @@ export class AppComponent {
 MIT
 
 ## Author
-[github: @reyvaxreecded]('https://github.com/reyvaxreecded')
+[github: @reyvaxreecded](https://github.com/reyvaxreecded)
 
