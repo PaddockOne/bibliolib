@@ -84,6 +84,51 @@ import { Component, Input } from '@angular/core';
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 200px 200px 200px;
     }
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(1),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(1) {
+      grid-column: 1 / 2;
+      grid-row: 1 / 4;
+    }
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(2),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(2),
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(3),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(3),
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(4),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(4) {
+      grid-column: 2 / 3; 
+    }
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(2),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(2) {
+      grid-row: 1 / 2;
+    }
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(3),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(3) {
+      grid-row: 2 / 3;
+    }
+    .gallery[nbr-photo="4"]>.img-wrapper:nth-child(4),
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(4) {
+      grid-row: 3 / 4;
+    }
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(4) {
+        position: relative;
+        display: block;
+    }
+    .gallery[nbr-photo="carousel"]>.img-wrapper:nth-child(4):after {
+      content: attr(length);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 2em;
+      font-weight: 700;
+      z-index: 5;
+    }
     .gallery-zoom {
       position: fixed;
       width: 100vw;
@@ -118,6 +163,25 @@ import { Component, Input } from '@angular/core';
     .gallery-zoom>.prev-btn:hover,
     .gallery-zoom>.next-btn:hover {
         background-color: rgba(255, 255, 255, 0.8);
+    }
+    @media screen and (max-width: 768px) {
+      .gallery[nbr-photo="1"],
+      .gallery[nbr-photo="2"] {
+        grid-template-rows: 300px;
+      }
+      .gallery[nbr-photo="3"] {
+        grid-template-rows: 150px 150px;
+      }
+      .gallery[nbr-photo="4"],
+      .gallery[nbr-photo="carousel"] {
+        grid-template-rows: 100px 100px 100px;
+      }
+      .gallery-zoom {
+        padding: 0;
+      }
+      .gallery-zoom>img {
+        max-width: calc(100vw - 120px);
+      }
     }
     `
   ]
