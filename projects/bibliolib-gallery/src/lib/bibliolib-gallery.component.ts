@@ -18,7 +18,7 @@ import { Component, Input } from '@angular/core';
           [attr.length]="photoList.length - 4 + '+'"
           (click)="toggleZoomPhoto($event, i)"
         >
-          <img [src]="photo" />
+          <img draggable="false" [src]="photo" />
         </section>
       </article>
       <article
@@ -31,6 +31,7 @@ import { Component, Input } from '@angular/core';
             *ngFor="let pic of photoZoomGallery; let i = index"
             [src]="pic"
             [style]="i != currentPhotoZoom ? 'display: none;' : null"
+            draggable="false"
           />
           <span (click)="nextPhoto()" class="next-btn no-close">></span>
         </article>
@@ -41,9 +42,11 @@ import { Component, Input } from '@angular/core';
       width: 100%;
       gap: 0.3em;
       box-sizing: border-box;
+      user-select: none;
     }
     .gallery>.img-wrapper {
       cursor: pointer;
+      user-select: none;
     }
     .gallery>.img-wrapper>img {
       width: 100%;
