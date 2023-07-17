@@ -217,6 +217,17 @@ export class BibliolibGalleryComponent {
     }
   }
 
+  @HostListener('document:keydown.arrowleft', ['$event']) onKeydownLeftHandler(event: KeyboardEvent) {
+    if(this.toggleZoom) {
+      this.prevPhoto();
+    }
+  }
+  @HostListener('document:keydown.arrowright', ['$event']) onKeydownRightHandler(event: KeyboardEvent) {
+    if(this.toggleZoom) {
+      this.nextPhoto();
+    }
+  }
+
 
   toggleZoomPhoto(event: Event, index: number) {
     const target = event.target as HTMLElement;
