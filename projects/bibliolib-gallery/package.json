@@ -5,7 +5,7 @@
     "name": "Reyvax reecded",
     "email": "xavier.deredec@live.fr"
   },
-  "version": "0.1.5",
+  "version": "0.1.6",
   "peerDependencies": {
     "@angular/common": "^16.0.0",
     "@angular/core": "^16.0.0"

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 
 @Component({
   selector: 'bibliolib-gallery',
@@ -210,6 +210,12 @@ export class BibliolibGalleryComponent {
   currentPhotoZoom: number = 0;
   toggleZoom: boolean = false;
   photoZoomGallery: string[] = [];
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if(this.toggleZoom) {
+      this.toggleZoom = false;
+    }
+  }
 
 
   toggleZoomPhoto(event: Event, index: number) {
