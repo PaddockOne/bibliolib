@@ -12,8 +12,14 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "paths": {
+      "bibliolib-datetime-picker": [
+        "dist/bibliolib-datetime-picker"
+      ],
       "bibliolib-gallery": [
         "dist/bibliolib-gallery"
+      ],
+      "my-lib": [
+        "dist/my-lib"
       ],
       "ng-gallery-r": [
         "dist/ng-gallery-r"
