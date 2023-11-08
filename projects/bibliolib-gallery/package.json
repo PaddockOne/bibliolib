@@ -5,10 +5,10 @@
     "name": "Reyvax reecded",
     "email": "xavier.deredec@live.fr"
   },
-  "version": "0.1.7",
+  "version": "0.1.8",
   "peerDependencies": {
-    "@angular/common": "^16.0.0",
-    "@angular/core": "^16.0.0"
+    "@angular/common": "^17.0.0",
+    "@angular/core": "^17.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
