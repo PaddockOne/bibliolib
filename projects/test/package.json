@@ -1,11 +1,6 @@
 {
-  "name": "bibliolib-gallery",
-  "license": "MIT",
-  "author": {
-    "name": "Reyvax reecded",
-    "email": "xavier.deredec@live.fr"
-  },
-  "version": "0.2.1",
+  "name": "test",
+  "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^17.0.0",
     "@angular/core": "^17.0.0"

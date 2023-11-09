@@ -26,6 +26,9 @@
       ],
       "ngx-gallery-r": [
         "dist/ngx-gallery-r"
+      ],
+      "test": [
+        "./dist/test"
       ]
     },
     "declaration": false,

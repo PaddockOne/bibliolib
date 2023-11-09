@@ -1,6 +1,6 @@
 {
   "name": "bibliolib-datetime-picker",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "license": "MIT",
   "author": {
     "name": "Reyvax reecded",
@@ -11,7 +11,7 @@
     "@angular/core": "^17.0.0"
   },
   "dependencies": {
-    "tslib": "^2.6.2"
+    "tslib": "^2.3.0"
   },
   "sideEffects": false
 }
