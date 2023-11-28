@@ -51,7 +51,7 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
 
-  filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' = 'nav-menu';
+  filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' = 'hidden';
   currentOrder!: FilterConfig.IOrderItemForRequest;
   currentFilter!: FilterConfig.IFullFilterItemConfig;
 

@@ -24,6 +24,32 @@ $gray-900: rgba(18, 25, 38, 1);
 
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+::-webkit-scrollbar { // background all
+    width: 12px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-track { // background bar
+    border-radius: 8px;
+    background-color: white;
+    
+}
+
+::-webkit-scrollbar-thumb{ // bar
+    border-radius: 8px;
+    background-color: $gray-200;
+    border: 3px solid white;
+    &:hover {
+        background-color: $gray-300;
+    }
+}
+
 .clickable {
     cursor: pointer !important;
 }
