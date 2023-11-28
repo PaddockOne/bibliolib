@@ -1,12 +1,11 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Inject } from '@angular/core';
 
 @Directive({
-  selector: '[appOnlyNumbers]',
-  standalone: true
+  selector: '[appOnlyNumbers]'
 })
 export class OnlyNumbersDirective {
 
-  constructor(private el: ElementRef) { }
+  constructor(@Inject(ElementRef) private el: ElementRef) { }
 
   @HostListener('input', ['$event']) onInputChange(event: Event) {
     const initialValue = this.el.nativeElement.value;
