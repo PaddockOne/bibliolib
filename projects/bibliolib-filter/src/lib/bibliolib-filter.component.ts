@@ -44,9 +44,13 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event']) clickout(event: Event) {
+    const targettedElement = event.target as HTMLElement;
+
     if (this.filterModalState !== 'hidden' && !this.isChildOfMenu(event, '.menu') && !this.isChildOfMenu(event, '.mat-datepicker-content')) {
-      this.filterModalState = 'hidden';
-      this.onStateChange();
+      if (!targettedElement.classList.contains('dont-hide')) {
+        this.filterModalState = 'hidden';
+        this.onStateChange();
+      }
     }
   }
 
@@ -173,6 +177,17 @@ export class BibliolibFilterComponent implements OnInit {
         this.isMobileDisplay = false;
       }
     });
+  }
+
+  onOrderChange(label: string, cat: string, direction: 'asc' | 'desc') {
+    this.currentOrder = {
+      label: label,
+      cat: cat,
+      direction: direction
+    }
+
+    this.filterModalState = 'nav-menu';
+    this.orderChange.emit(this.currentOrder);
   }
 
   /**

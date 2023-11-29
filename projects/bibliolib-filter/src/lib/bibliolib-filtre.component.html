@@ -149,14 +149,15 @@
     </section>
     <section class="menu__body">
       <!-- Order section -->
-      <section *ngIf="mode !== 'filter' && filterModalState === 'nav-menu'" (click)="filterModalState = 'order-menu'" class="order-btn">
-        <div class="order-btn__col">
+      <section *ngIf="mode !== 'filter' && filterModalState === 'nav-menu'" (click)="filterModalState = 'order-menu'" class="order-btn dont-hide">
+        <div class="order-btn__col dont-hide">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1em"
             height="1em"
             preserveAspectRatio="xMidYMid meet"
             viewBox="0 0 24 24"
+            class="dont-hide"
           >
             <path
               fill="none"
@@ -167,15 +168,15 @@
               d="M6 3v18M6 3l4 4M6 3L2 7m16 14V3m0 18l4-4m-4 4l-4-4"
             />
           </svg>
-          <h3 class="text--lg text--bold primary-500 m-0">Trier</h3>
+          <h3 class="text--lg text--bold primary-500 m-0 dont-hide">Trier</h3>
         </div>
-        <div class="order-btn__col text--sm text--regular gray-600">
+        <div class="order-btn__col text--sm text--regular gray-600 dont-hide">
           Par {{ currentOrder.label }}
           {{ currentOrder.direction === "asc" ? "croissant" : "décroissant" }}
         </div>
-        <div class="order-btn__col">
+        <div class="order-btn__col dont-hide">
           <svg
-            class="arrow primary-500"
+            class="arrow primary-500 dont-hide"
             xmlns="http://www.w3.org/2000/svg"
             width="1em"
             height="1em"
@@ -189,9 +190,12 @@
           </svg>
         </div>
       </section>
-      <section *ngIf="filterModalState === 'order-menu'" class="order-option-list">
-        <span *ngFor="let option of orderConfig" class="order-option-list__item" [class.selected]="currentOrder.cat === option.cat">
-          <p class="text--md text--regular primary-500">{{ option.label }}</p>
+      <section *ngIf="filterModalState === 'order-menu'" class="order-option-list dont-hide">
+        <span *ngFor="let option of orderConfig" class="order-option-list__item dont-hide" (click)="onOrderChange(option.label, option.cat, 'asc')" [class.selected]="currentOrder.cat === option.cat && currentOrder.direction === 'asc'">
+          <p class="text--md text--regular primary-500 dont-hide">{{ option.label }} croissant(e)</p>
+        </span>
+        <span *ngFor="let option of orderConfig" class="order-option-list__item dont-hide" (click)="onOrderChange(option.label, option.cat, 'desc')" [class.selected]="currentOrder.cat === option.cat && currentOrder.direction === 'desc'">
+          <p class="text--md text--regular primary-500 dont-hide">{{ option.label }} décroissant(e)</p>
         </span>
       </section>
       <!-- Filter section -->

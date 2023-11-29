@@ -16,7 +16,7 @@ export class AppComponent {
   mode: 'filter' | 'order' | 'filter-order' = 'filter-order';
   orderConfig: FilterConfig.IOrderItemConfig[] = [
     { label: 'Date', cat: 'date' },
-    { label: 'Titre', cat: 'title' },
+    { label: 'Sortie', cat: 'sortie' },
     { label: 'Auteur', cat: 'author' }
   ];
   filterConfig: FilterConfig.IFullFilterItemConfig[] = [
