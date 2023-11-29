@@ -263,19 +263,20 @@
         <span *ngFor="let date of dateListLabel" class="filter-option-date__item" (click)="addDateFilter(date.value)" [class.selected]="isSelectedDateFilter(date.value)">
           <p class="text--md text--regular primary-500">{{ date.label }}</p>
         </span>
-        <mat-form-field style="width: calc(100% - 0.5em);">
+        <mat-form-field style="width: calc(100% - 0.5em);" class="dont-hide">
           <mat-label>Période personalisée</mat-label>
           <mat-date-range-input
             [formGroup]="dateRange"
             (click)="date.open()"
             [rangePicker]="date"
+            class="dont-hide"
           >
             <input matStartDate formControlName="start" />
             <input matEndDate formControlName="end" />
           </mat-date-range-input>
-          <mat-datepicker-toggle class="picker" matSuffix [for]="date">
+          <mat-datepicker-toggle class="picker dont-hide" matSuffix [for]="date">
           </mat-datepicker-toggle>
-          <mat-date-range-picker touchUi #date></mat-date-range-picker>
+          <mat-date-range-picker touchUi #date class="dont-hide"></mat-date-range-picker>
         </mat-form-field>
       </section>
     </section>
