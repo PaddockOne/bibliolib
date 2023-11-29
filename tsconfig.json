@@ -15,6 +15,9 @@
       "bibliolib-datetime-picker": [
         "dist/bibliolib-datetime-picker"
       ],
+      "bibliolib-filter": [
+        "./dist/bibliolib-filter"
+      ],
       "bibliolib-gallery": [
         "dist/bibliolib-gallery"
       ],
