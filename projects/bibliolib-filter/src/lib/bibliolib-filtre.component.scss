@@ -2,6 +2,7 @@
 
 $primary-50: #eaeef0;
 $primary-100: #d5dde2;
+$primary-200: #aabbc4;
 $primary-300: rgba(128, 153, 167, 1);
 $primary-500: #2b546b;
 $primary-600: rgba(35, 68, 86, 1);
@@ -192,6 +193,23 @@ $gray-900: rgba(18, 25, 38, 1);
     img, svg{
         width: 1.042em;
         height: 1.042em;
+    }
+}
+
+.btn--primary{
+    border: 1px solid $primary-200;
+    background: $primary-500;
+    color: white;
+    &:hover{
+        background-color: $primary-600;
+    }
+    &:focus{
+        outline: 3px solid #567789;
+    }
+    &:disabled{
+        background-color: $primary-100;
+        border-color: $primary-50;
+        color: white;
     }
 }
 
