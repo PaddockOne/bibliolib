@@ -31,6 +31,7 @@ export class BibliolibFilterComponent implements OnInit {
   @Input() orderConfig: FilterConfig.IOrderItemConfig[] = [];
   @Input() filterConfig: FilterConfig.IFullFilterItemConfig[] = [];
   @Input() activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
+  @Input() lang: 'fr-FR' | 'en-US' = 'fr-FR';
 
   @Output() orderChange: EventEmitter<FilterConfig.IOrderItemForRequest> = new EventEmitter<FilterConfig.IOrderItemForRequest>();
   @Output() filterChange: EventEmitter<FilterConfig.IFullFilterItemConfig[]> = new EventEmitter<FilterConfig.IFullFilterItemConfig[]>();
@@ -67,8 +68,8 @@ export class BibliolibFilterComponent implements OnInit {
   startDateControl: FormControl = new FormControl();
   endDateControl: FormControl = new FormControl();
 
-  rangeMinControl: FormControl = new FormControl('', { nonNullable: true });
-  rangeMaxControl: FormControl = new FormControl('', { nonNullable: true });
+  rangeMinControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
+  rangeMaxControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
 
   filterConfigWithoutRangeItems: FilterConfig.IFullFilterItemConfig[] = [];
   filterConfigWithRangeItems: FilterConfig.IFullFilterItemConfig[] = [];
@@ -78,27 +79,27 @@ export class BibliolibFilterComponent implements OnInit {
   dateListLabel = [
     {
       value: 'today',
-      label: 'Aujourd\'hui'
+      label: this.lang === 'fr-FR' ? 'Aujourd\'hui' : 'Today'
     },
     {
       value: 'yesterday',
-      label: 'Hier'
+      label: this.lang === 'fr-FR' ? 'Hier' : 'Yesterday'
     },
     {
       value: 'week',
-      label: 'Semaine en cours'
+      label: this.lang === 'fr-FR' ? 'Semaine en cours' : 'Current week'
     },
     {
       value: 'month',
-      label: 'Mois en cours'
+      label: this.lang === 'fr-FR' ? 'Mois en cours' : 'Current month'
     },
     {
       value: 'trimester',
-      label: 'Trimestre en cours'
+      label: this.lang === 'fr-FR' ? 'Trimestre en cours' : 'Current trimester'
     },
     {
       value: 'year',
-      label: 'Année en cours'
+      label: this.lang === 'fr-FR' ? 'Année en cours' : 'Current year'
     }
   ]
 
