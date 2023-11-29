@@ -261,7 +261,8 @@
               "projects/test-lib/src/assets"
             ],
             "styles": [
-              "projects/test-lib/src/styles.scss"
+              "projects/test-lib/src/styles.scss",
+              "@angular/material/prebuilt-themes/deeppurple-amber.css"
             ],
             "scripts": []
           },
