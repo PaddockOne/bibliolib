@@ -11,9 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { OnlyNumbersDirective } from './only-numbers.directive';
 
 @Component({
-  selector: 'bibliolib-filtre',
-  templateUrl: './bibliolib-filtre.component.html',
-  styleUrls: ['./bibliolib-filtre.component.scss'],
+  selector: 'bibliolib-filter',
+  templateUrl: './bibliolib-filter.component.html',
+  styleUrls: ['./bibliolib-filter.component.scss'],
   standalone: true,
   imports: [
     MatDatepickerModule,
