@@ -1,6 +1,26 @@
 {
   "name": "bibliolib-filter",
   "version": "0.0.1",
+  "description": "Bibliolib filter",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Reyvax reecded",
+      "email": "xavier.deredec@live.fr",
+      "url": "https://github.com/reyvaxreecded"
+    },
+    {
+      "name": "Quezaquo",
+      "email": "pro.quezaquo@gmail.com",
+      "url": "https://github.com/Quezaquo"
+    }
+  ],
+  "keywords": [
+    "angular",
+    "filter",
+    "bibliolib",
+    "material"
+  ],
   "peerDependencies": {
     "@angular/common": "^17.0.1",
     "@angular/core": "^17.0.1",

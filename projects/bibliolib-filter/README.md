@@ -1,24 +1,106 @@
 # BibliolibFilter
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+[![npm version](https://badge.fury.io/js/bibliolib-filter.svg)](https://badge.fury.io/js/bibliolib-filter)
 
-## Code scaffolding
+This library is a filter component for the bibliolib project. It is used to filter and order the list of some items.
 
-Run `ng generate component component-name --project bibliolib-filter` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project bibliolib-filter`.
-> Note: Don't forget to add `--project bibliolib-filter` or else it will be added to the default project in your `angular.json` file. 
+# Installation
 
-## Build
+```bash
+npm install bibliolib-filter
+```
 
-Run `ng build bibliolib-filter` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Usage
 
-## Publishing
+Import the material theme in your angular.json
 
-After building your library with `ng build bibliolib-filter`, go to the dist folder `cd dist/bibliolib-filter` and run `npm publish`.
+```json
+"styles": [
+    "@angular/material/prebuilt-themes/deeppurple-amber.css",
+    "other styles..."
+]
+```
 
-## Running unit tests
+Import animations in your app.module.ts or app.config.ts
 
-Run `ng test bibliolib-filter` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```typescript
+import { provideAnimations } from '@angular/platform-browser/animations';
+// other imports...
 
-## Further help
+export const appConfig: ApplicationConfig = {
+  providers: [provideAnimations(), other providers...]
+};
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Import the module in your app.module.ts
+
+```typescript
+import { BibliolibFilterModule } from 'bibliolib-filter';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    BibliolibFilterModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+
+export class AppModule { }
+```
+
+Use the component in your app.component.html
+
+```html
+<bibliolib-filter
+    [mode]="mode"
+    [orderConfig]="orderConfig"
+    [filterConfig]="filterConfig"
+    [activeFilterList]="activeFilterList"
+    [lang]="'fr-FR'"
+    (orderChange)="onOrderChange($event)"
+    (filterChange)="onFilterChange($event)"
+    (searchChange)="onSearchChange($event)">
+</bibliolib-filter>
+```
+
+```typescript
+
+```
+
+## Inputs
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| mode | string | 'filter-order' | The mode of the filter. Can be 'filter', 'order' or 'filter-order'. |
+| orderConfig | FilterConfig.IOrderItemConfig[] | [] | The configuration of the order. |
+| filterConfig | FilterConfig.IFullFilterItemConfig[] | [] | The configuration of the filter. |
+| activeFilterList | FilterConfig.IFullFilterItemConfig[] | [] | The list of active filters. |
+| lang | string | 'fr-FR' | The language of the filter : 'fr-FR' or 'en-US'. |
+
+## Outputs
+
+| Name | Type | Description |
+| --- | --- | --- |
+| orderChange | EventEmitter<FilterConfig.IOrderItemForRequest> | The event emitted when the order is changed. |
+| filterChange | EventEmitter<FilterConfig.IFullFilterItemConfig[]> | The event emitted when the filter is changed. |
+| searchChange | EventEmitter<string> | The event emitted when the search input is changed. |
+
+# License
+
+MIT
+
+# Author
+
+Github [@reyvaxreecded](https://github.com/reyvaxreecded).
+Github [@Quezaquo](https://github.com/Quezaquo).
+
+## Keywords
+
+- Angular
+- Filter
+- Bibliolib
+- Material
