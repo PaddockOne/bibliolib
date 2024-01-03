@@ -554,4 +554,8 @@ export class BibliolibFilterComponent implements OnInit {
       }
     }
   }
+
+  onSearchChange() {
+    this.searchChange.emit(this.filterSearchCtrl.value);
+  }
 }

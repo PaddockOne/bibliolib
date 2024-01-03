@@ -2,7 +2,7 @@
 
 <article class="searchbar-container">
   <section class="searchbar-container__action">
-    <form class="searchbar">
+    <form (ngSubmit)="onSearchChange()" class="searchbar">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1em"
@@ -20,9 +20,10 @@
         type="search"
         results="5"
         placeholder="Rechercher"
+        [formControl]="filterSearchCtrl"
         class="primary-500"
       />
-      <button class="text--sm text--medium">Rechercher</button>
+      <button (click)="onSearchChange()" class="text--sm text--medium">Rechercher</button>
     </form>
     <button class="filter-btn" (click)="toggleMenu($event)">
       {{ getFilterButtonLabel() }}
