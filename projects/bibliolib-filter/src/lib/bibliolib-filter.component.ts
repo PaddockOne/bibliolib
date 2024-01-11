@@ -4,7 +4,7 @@ import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
 import { BibliolibFilterService } from './bibliolib-filter.service';
 import { getAnimations } from './animations';
-import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
@@ -23,7 +23,7 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
     ReactiveFormsModule,
     CommonModule
   ],
-  providers: [TitleCasePipe, DatePipe, OnlyNumbersDirective],
+  providers: [TitleCasePipe, OnlyNumbersDirective],
   animations: getAnimations()
 })
 export class BibliolibFilterComponent implements OnInit {
@@ -104,7 +104,7 @@ export class BibliolibFilterComponent implements OnInit {
   ]
 
 
-  constructor(private datePipe: DatePipe, private renderer: Renderer2, private dateService: BibliolibFilterService) { }
+  constructor( private renderer: Renderer2, private dateService: BibliolibFilterService) { }
 
   ngOnInit(): void {
     if (this.mode === 'order' || this.mode === 'filter-order') {
@@ -238,7 +238,7 @@ export class BibliolibFilterComponent implements OnInit {
   getFormattedFilterValue(filterType: string, value: string): string {
     switch (filterType) {
       case 'date':
-        return this.datePipe.transform(value.split('|')[0], 'dd/MM/yyyy') + ' - ' + this.datePipe.transform(value.split('|')[1], 'dd/MM/yyyy');
+        return value.split('|')[0] + ' - ' + value.split('|')[1];
       case 'numeric_range':
         return (value.split('|')[0] != 'null' ? value.split('|')[0] : '0') + ' - ' + (value.split('|')[1] != 'null' ? value.split('|')[1] : '∞');
       default:
@@ -361,6 +361,9 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {string} value valeur du filtre
    */
   private removeValueFromExistingFilter(catIndex: number, value: string) {
+    if(!this.tempSelectedFilter[catIndex]) {
+      this.filterChange.emit(this.tempSelectedFilter);
+    }
     const values = this.tempSelectedFilter[catIndex].values;
     const valueIndex = values.indexOf(value);
 
@@ -420,7 +423,15 @@ export class BibliolibFilterComponent implements OnInit {
     switch (value) {
       case 'today':
         const today = new Date();
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 2, 0, 0, 0).toISOString() + '|' + new Date(today.getFullYear(), today.getMonth(), today.getDate(), 25, 59, 0, 0).toISOString()) ? true : false;
+        const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+        const endToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 0);
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // Utilisez toLocaleString avec l'option timeZone
+        const startTodayLocal = startToday.toLocaleString(undefined, { timeZone });
+        const endTodayLocal = endToday.toLocaleString(undefined, { timeZone });
+
+        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(startTodayLocal + '|' +  endTodayLocal) ? true : false;
       case 'yesterday':
         return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartYesterdayDate() + '|' + this.dateService.getEndYesterdayDate()) ? true : false;
       case 'week':
@@ -471,10 +482,20 @@ export class BibliolibFilterComponent implements OnInit {
       }
     } else {
       if (!this.checkCurrentDateFilter(this.currentFilter.label)) {
-        this.createNewFilter(this.dateRange.value.start + '|' + this.dateRange.value.end);
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const startDate = new Date(this.dateRange.value.start.getFullYear(), this.dateRange.value.start.getMonth(), this.dateRange.value.start.getDate(), 0, 0, 0, 0);
+        const endDate = new Date(this.dateRange.value.end.getFullYear(), this.dateRange.value.end.getMonth(), this.dateRange.value.end.getDate(), 23, 59, 59, 0);
+        const start = startDate.toLocaleString(undefined, { timeZone });
+        const end = endDate.toLocaleString(undefined, { timeZone });
+        this.createNewFilter(start + '|' + end);
       } else {
         const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
-        this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [this.dateRange.value.start + '|' + this.dateRange.value.end] };
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const startDate = new Date(this.dateRange.value.start.getFullYear(), this.dateRange.value.start.getMonth(), this.dateRange.value.start.getDate(), 0, 0, 0, 0);
+        const endDate = new Date(this.dateRange.value.end.getFullYear(), this.dateRange.value.end.getMonth(), this.dateRange.value.end.getDate(), 23, 59, 59, 0);
+        const start = startDate.toLocaleString(undefined, { timeZone });
+        const end = endDate.toLocaleString(undefined, { timeZone });
+        this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [start + '|' + end] };
       }
     }
   }
