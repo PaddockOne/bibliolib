@@ -238,7 +238,7 @@ export class BibliolibFilterComponent implements OnInit {
   getFormattedFilterValue(filterType: string, value: string): string {
     switch (filterType) {
       case 'date':
-        return value.split('|')[0] + ' - ' + value.split('|')[1];
+        return value.split('|')[0].split(' ')[0] + ' - ' + value.split('|')[1].split(' ')[0];
       case 'numeric_range':
         return (value.split('|')[0] != 'null' ? value.split('|')[0] : '0') + ' - ' + (value.split('|')[1] != 'null' ? value.split('|')[1] : '∞');
       default:
