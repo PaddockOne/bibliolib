@@ -117,6 +117,8 @@ export class BibliolibFilterComponent implements OnInit {
 
     if (this.mode === 'filter' || this.mode === 'filter-order') {
 
+      this.tempSelectedFilter = [...this.activeFilterList];
+
       this.filterConfigWithoutRangeItems = this.filterConfig.filter(f => f.type !== 'numeric_range');
       this.filterConfigWithRangeItems = this.filterConfig.filter(f => f.type === 'numeric_range');
 
