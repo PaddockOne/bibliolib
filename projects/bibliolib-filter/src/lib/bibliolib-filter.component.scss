@@ -447,6 +447,11 @@ $gray-900: rgba(18, 25, 38, 1);
                     }
                 }
             }
+
+            // @supports (-webkit-touch-callout: none) { // iOS Safari CSS only
+            //     padding-top: 4em;
+            // }
+
             .back-arrow {
                 grid-column: 1 / 2;
             }
