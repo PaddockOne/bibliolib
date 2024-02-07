@@ -33,7 +33,26 @@ export class AppComponent {
       values: [
         'Auteur 1',
         'Auteur 2',
-        'Auteur 3'
+        'Auteur 3',
+        'Auteur 4',
+        'Auteur 5',
+        'Auteur 6',
+        'Auteur 7',
+        'Auteur 8',
+        'Auteur 9',
+        'Auteur 10',
+        'Auteur 11',
+        'Auteur 12',
+        'Auteur 13',
+        'Auteur 14',
+        'Auteur 15',
+        'Auteur 16',
+        'Auteur 17',
+        'Auteur 18',
+        'Auteur 19',
+        'Auteur 20',
+        'Auteur 21',
+        'Auteur 22',
       ]
     },
     {
@@ -76,6 +95,7 @@ export class AppComponent {
   }
 
   onFilterChange(event: FilterConfig.IFullFilterItemConfig[]) {
+    console.log(event); 
     this.activeFilterList = [...event].slice();
   }
 

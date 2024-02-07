@@ -7,131 +7,220 @@ export class BibliolibFilterService {
 
   constructor() { }
 
-  getStartTodayDate(): string {
+  /**
+   * @description
+   * Return the date of the current day
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
+   */
+  getStartTodayDate() {
     const today = new Date();
-    return new Date(today.getFullYear(), today.getMonth(), today.getDate(), 2, 0, 0, 0).toISOString();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const todayLocal = todayStart.toLocaleString(undefined, { timeZone });
+
+    return todayLocal;
   }
-  
-  getEndTodayDate(): string {
+
+  getEndTodayDate() {
     const today = new Date();
-    return new Date(today.getFullYear(), today.getMonth(), today.getDate(), 25, 59, 0, 0).toISOString();
+    const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const todayLocal = todayEnd.toLocaleString(undefined, { timeZone });
+
+    return todayLocal;
   }
-  
+
+
   /** 
    * @description
    * Return the date of the previous day
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T00:00:00.000Z'
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
    */
-  getStartYesterdayDate(): string {
+  getStartYesterdayDate() {
     const today = new Date();
-    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 2, 0, 0);   
-    return yesterday.toISOString();
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 0, 0, 0);
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const yesterdayLocal = yesterday.toLocaleString(undefined, { timeZone });
+
+    return yesterdayLocal;
   }
 
-  getEndYesterdayDate(): string {
+  getEndYesterdayDate() {
     const today = new Date();
-    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 25, 59, 59);
-    return yesterday.toISOString();
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1, 23, 59, 59);
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const yesterdayLocal = yesterday.toLocaleString(undefined, { timeZone });
+
+    return yesterdayLocal;
   }
 
   /**
    * @description
    * Return the date of the first day of the current week
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T00:00:00.000Z'
-  */ 
-  getStartWeekDate(): string {
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
+  */
+  getStartWeekDate() {
     let date = new Date();
     let day = date.getDay();
     let diff = date.getDate() - day + (day === 0 ? -6 : 1);
-    return new Date(date.getFullYear(), date.getMonth(), diff, 2, 0, 0).toISOString();
+    // Créez une nouvelle date avec le fuseau horaire local
+    let startOfWeek = new Date(date.getFullYear(), date.getMonth(), diff, 0, 0, 0);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const startOfWeekLocal = startOfWeek.toLocaleString(undefined, { timeZone });
+
+    return startOfWeekLocal;
   }
   /**
    * @description
    * Return the date of the last day of the current week
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T23:59:59.000Z'
-  */ 
-  getEndWeekDate(): string {
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 23:59:59'
+  */
+  getEndWeekDate() {
     let date = new Date();
     let day = date.getDay();
     let diff = date.getDate() - day + (day === 0 ? 0 : 7);
-    return new Date(date.getFullYear(), date.getMonth(), diff, 25, 59, 59).toISOString();
+    // Créez une nouvelle date avec le fuseau horaire local
+    let endOfWeek = new Date(date.getFullYear(), date.getMonth(), diff, 23, 59, 59);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const endOfWeekLocal = endOfWeek.toLocaleString(undefined, { timeZone });
+
+    return endOfWeekLocal;
   }
   /**
    * @description
    * Return the date of the first day of the current month
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T00:00:00.000Z'
-  */ 
-  getStartMonthDate(): string {
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
+  */
+  getStartMonthDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), date.getMonth(), 1, 2, 0, 0).toISOString();
+    // Créez une nouvelle date avec le fuseau horaire local
+    let startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const startOfMonthLocal = startOfMonth.toLocaleString(undefined, { timeZone });
+
+    return startOfMonthLocal;
   }
   /**
    * @description
    * Return the date of the last day of the current month
-   * @returns {string} ISO string of the date
-   * @example '2020-01-31T23:59:59.000Z'
-  */ 
-  getEndMonthDate(): string {
+   * @returns {string} local date string of the date
+   * @example '31/01/2024 23:59:59'
+  */
+  getEndMonthDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 25, 59, 59).toISOString();
+
+    // Créez une nouvelle date avec le fuseau horaire local
+    let endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const endOfMonthLocal = endOfMonth.toLocaleString(undefined, { timeZone });
+
+    return endOfMonthLocal;
   }
   /**
    * @description
    * Return the date of the first day of the current trimester
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T00:00:00.000Z'
-  */ 
-  getStartTrimesterDate(): string {
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
+  */
+  getStartTrimesterDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), date.getMonth() - 2, 1, 2, 0, 0).toISOString();
+    // Créez une nouvelle date avec le fuseau horaire local
+    let startOfTrimester = new Date(date.getFullYear(), date.getMonth() - 2, 1, 0, 0, 0);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const startOfTrimesterLocal = startOfTrimester.toLocaleString(undefined, { timeZone });
+
+    return startOfTrimesterLocal;
   }
   /**
    * @description
    * Return the date of the last day of the current trimester
-   * @returns {string} ISO string of the date
-   * @example '2020-01-31T23:59:59.000Z'
-  */ 
-  getEndTrimesterDate(): string {
+   * @returns {string} local date string of the date
+   * @example '31/03/2024 23:59:59'
+  */
+  getEndTrimesterDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0, 25, 59, 59).toISOString();
+    // Calculez la fin du trimestre en cours
+    const currentMonth = date.getMonth();
+    const endOfTrimester = new Date(date.getFullYear(), currentMonth + 3 - (currentMonth % 3), 0, 23, 59, 59);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const endOfTrimesterLocal = endOfTrimester.toLocaleString(undefined, { timeZone });
+
+    return endOfTrimesterLocal;
   }
   /**
    * @description
    * Return the date of the first day of the current year
-   * @returns {string} ISO string of the date
-   * @example '2020-01-01T00:00:00.000Z'
-  */ 
-  getStartYearDate(): string {
+   * @returns {string} local date string of the date
+   * @example '01/01/2024 00:00:00'
+  */
+  getStartYearDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), 0, 1, 2, 0, 0).toISOString();
+    // Créez une nouvelle date avec le fuseau horaire local
+    let startOfYear = new Date(date.getFullYear(), 0, 1, 0, 0, 0);
+
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const startOfYearLocal = startOfYear.toLocaleString(undefined, { timeZone });
+
+    return startOfYearLocal;
   }
   /**
    * @description
    * Return the date of the last day of the current year
-   * @returns {string} ISO string of the date
-   * @example '2020-12-31T23:59:59.000Z'
-  */ 
-  getEndYearDate(): string {
+   * @returns {string} local date string of the date
+   * @example '31/12/2024 23:59:59'
+  */
+  getEndYearDate() {
     let date = new Date();
-    return new Date(date.getFullYear(), 11, 31, 24, 59, 59).toISOString();
-  }
-  /**
-   * @description
-   * Return Formated datetime string
-   * @param {string} dateTimeString ISO string of the date
-   * @returns {string} Formated datetime string
-   * @example '2020-01-01 00:00:00'
-  */  
-  convertDateTime(dateTimeString: string) {
-    const date = new Date(dateTimeString);
+    // Créez une nouvelle date avec le fuseau horaire local
+    let endOfYear = new Date(date.getFullYear(), 11, 31, 23, 59, 59);
 
-    const formattedDate = date.toISOString().split('T')[0];
-    date.setHours(date.getHours() - 2);
-    const formattedTime = date.toTimeString().split(' ')[0];
-    return `${formattedDate} ${formattedTime}`;
+    // Obtenez le nom du fuseau horaire local
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Utilisez toLocaleString avec l'option timeZone
+    const endOfYearLocal = endOfYear.toLocaleString(undefined, { timeZone });
+
+    return endOfYearLocal;
   }
 }
