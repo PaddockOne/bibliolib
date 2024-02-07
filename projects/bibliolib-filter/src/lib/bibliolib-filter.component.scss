@@ -410,7 +410,7 @@ $gray-900: rgba(18, 25, 38, 1);
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
     background: rgba(73, 73, 73, 0.5);
     .menu {
@@ -418,13 +418,13 @@ $gray-900: rgba(18, 25, 38, 1);
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
+        height: 100dvh;
         background: #fff;
         z-index: 120;
         @include Flex($justify: flex-start, $align: center, $direction: column, $wrap: nowrap);
         @media screen and (min-width: 1280px) {
             width: 15%;
-            height: 100vh;
+            height: 100dvh;
             right: 0;
             left: unset;
         }
@@ -448,11 +448,10 @@ $gray-900: rgba(18, 25, 38, 1);
                 }
             }
 
-            &.top-padding {
-                // padding-top: 4em;
-                padding-top: 250px;
-                background: lightgreen;
-            }
+            // &.top-padding {
+            //     // padding-top: 250px;
+            //     // background: lightgreen;
+            // }
 
             // @supports (-webkit-touch-callout: none) { // iOS Safari CSS only
             //     padding-top: 4em;
@@ -497,7 +496,7 @@ $gray-900: rgba(18, 25, 38, 1);
 
         &__body {
             width: 100%;
-            height: 100vh;
+            height: 100dvh;
             @include Flex($direction: column, $wrap: nowrap, $align: center);
             padding: 0 0.5em;
             .order-btn {
@@ -578,10 +577,10 @@ $gray-900: rgba(18, 25, 38, 1);
                 bottom: 10px;
                 height: 25px;
                 @media screen and (max-width: 768px) {
-                    top: calc(85vh - 25px);
+                    top: calc(85dvh - 25px);
                 }
                 @media screen and (min-width: 768px) and (max-width: 1200px) {
-                    top: calc(90vh - 25px);
+                    top: calc(90dvh - 25px);
                 }
             }
 
@@ -770,7 +769,7 @@ $gray-900: rgba(18, 25, 38, 1);
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
     #overlay {
         background: rgba(52, 64, 84, 0.7);
@@ -783,14 +782,14 @@ $gray-900: rgba(18, 25, 38, 1);
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60vh;
+        height: 60dvh;
         background: #fff;
         @include Flex(flex-start, center, column, wrap);
         z-index: 120;
         @media screen and (min-width: 1280px) {
             width: 15%;
-            height: 100vh;
-            max-height: 100vh;
+            height: 100dvh;
+            max-height: 100dvh;
             right: 0;
             left: unset;
         }
