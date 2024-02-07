@@ -55,8 +55,6 @@ export class BibliolibFilterComponent implements OnInit {
     }
   }
 
-  userAgentType: string = 'other';
-
   filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' = 'hidden';
   currentOrder!: FilterConfig.IOrderItemForRequest;
   currentFilter!: FilterConfig.IFullFilterItemConfig;
@@ -181,27 +179,6 @@ export class BibliolibFilterComponent implements OnInit {
         this.isMobileDisplay = false;
       }
     });
-
-    this.userAgentType = this.determineOs(navigator.userAgent);
-  }
-
-  /**
-   * Determine current user OS platform to avoid losing header filter on ios mobile devices
-   * @param ua UserAgent
-   * @returns OS platform string 'windows' | 'mac' | 'linux' | 'ios' | 'other'
-   */
-  determineOs(ua: string): string {
-    if (ua.indexOf('Windows') !== -1) {
-      return 'windows';
-    } else if (ua.indexOf('Macintosh') !== -1) {
-      return 'mac';
-    } else if (ua.indexOf('Linux') !== -1) {
-      return 'linux';
-    } else if (ua.indexOf('iPhone') !== -1 || ua.indexOf('iPad') !== -1 || ua.indexOf('iPod') !== -1) {
-      return 'ios';
-    }
-
-    return 'other';
   }
 
   onOrderChange(label: string, cat: string, direction: 'asc' | 'desc') {
