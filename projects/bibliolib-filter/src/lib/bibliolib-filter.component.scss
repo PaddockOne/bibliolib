@@ -450,7 +450,8 @@ $gray-900: rgba(18, 25, 38, 1);
 
             &.top-padding {
                 // padding-top: 4em;
-                padding-top: 100px
+                padding-top: 250px;
+                background: lightgreen;
             }
 
             // @supports (-webkit-touch-callout: none) { // iOS Safari CSS only
