@@ -65,7 +65,7 @@
 
 <article *ngIf="filterModalState !== 'hidden'" class="nav-menu">
   <section @searchandfilter class="menu">
-    <section class="menu__header">
+    <section class="menu__header" [ngClass]="userAgentType === 'ios' ? 'top-padding' : 'no-padding'">
       <svg
         class="back-arrow"
         (click)="toggleMenu($event)"

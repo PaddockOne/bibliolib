@@ -448,6 +448,10 @@ $gray-900: rgba(18, 25, 38, 1);
                 }
             }
 
+            &.top-padding {
+                padding-top: 4em;
+            }
+
             // @supports (-webkit-touch-callout: none) { // iOS Safari CSS only
             //     padding-top: 4em;
             // }
