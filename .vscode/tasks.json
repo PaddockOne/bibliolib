@@ -37,6 +37,34 @@
           }
         }
       }
+    },
+    {
+      "type": "shell",
+      "label": "Build bibliolib-filter",
+      "command": "ng build bibliolib-filter",
+      "presentation": {
+        "reveal": "always"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Install bibliolib-filter",
+      "command": "npm install \"file://./dist/bibliolib-filter\"",
+      "presentation": {
+        "reveal": "always"
+      },
+      "dependsOn": "Build bibliolib-filter",
+      "dependsOrder": "sequence"
+    },
+    {
+      "type": "shell",
+      "label": "Launch server test-lib",
+      "command": "ng serve test-lib --port 4200",
+      "presentation": {
+        "reveal": "always"
+      },
+      "dependsOn": "Install bibliolib-filter",
+      "dependsOrder": "sequence"
     }
   ]
 }
