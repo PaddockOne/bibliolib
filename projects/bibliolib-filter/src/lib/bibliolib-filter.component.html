@@ -23,13 +23,16 @@
         [formControl]="filterSearchCtrl"
         class="primary-500"
       />
-      <button (click)="onSearchChange()" class="text--sm text--medium">
+      <button (click)="onSearchChange()" class="text--sm text--medium" [ngClass]="mode === 'search-only' ? 'search-only' : ''">
         Rechercher
       </button>
     </form>
-    <button class="filter-btn" (click)="toggleMenu($event)">
-      {{ getFilterButtonLabel() }}
-    </button>
+
+    @if (mode !== 'search-only') {
+      <button class="filter-btn" (click)="toggleMenu($event)">
+        {{ getFilterButtonLabel() }}
+      </button>
+    }
   </section>
   @if(activeFilterList.length > 0 && isMobileDisplay === false) {
   <section class="active-filter-list--desktop">

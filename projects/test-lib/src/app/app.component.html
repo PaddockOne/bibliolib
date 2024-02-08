@@ -1,5 +1,10 @@
 <bibliolib-filter
     [mode]="mode"
+    (searchChange)="onSearchChange($event)">
+</bibliolib-filter>
+
+<bibliolib-filter
+    [mode]="'filter'"
     [orderConfig]="orderConfig"
     [filterConfig]="filterConfig"
     [activeFilterList]="activeFilterList"
