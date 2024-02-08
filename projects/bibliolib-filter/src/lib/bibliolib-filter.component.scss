@@ -320,6 +320,10 @@ $gray-900: rgba(18, 25, 38, 1);
                     cursor: not-allowed;
                     filter: grayscale(80%);
                 }
+
+                &.search-only {
+                    border-radius: 0 4px 4px 0;
+                }
             }
 
             input[type="search"] {
