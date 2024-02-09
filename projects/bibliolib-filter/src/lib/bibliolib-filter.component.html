@@ -23,12 +23,12 @@
         [formControl]="filterSearchCtrl"
         class="primary-500"
       />
-      <button (click)="onSearchChange()" class="text--sm text--medium" [ngClass]="mode === 'search-only' ? 'search-only' : ''">
+      <button (click)="onSearchChange()" class="text--sm text--medium" [ngClass]="mode() === 'search-only' ? 'search-only' : ''">
         Rechercher
       </button>
     </form>
 
-    @if (mode !== 'search-only') {
+    @if (mode() !== 'search-only') {
       <button class="filter-btn" (click)="toggleMenu($event)">
         {{ getFilterButtonLabel() }}
       </button>
@@ -36,7 +36,7 @@
   </section>
   @if(activeFilterList.length > 0 && isMobileDisplay === false) {
   <section class="active-filter-list--desktop">
-    @for(filter of activeFilterList; track $index) {
+    @for(filter of activeFilterList(); track $index) {
     <section class="badge-group badge-group--primary">
       <label>{{ filter.label }}</label>
       @for(value of filter.values; track $index) {
@@ -118,7 +118,7 @@
     <section class="btn-reset-filter">
       @if(isMobileDisplay === true) {
       <section class="active-filter-list--mobile">
-        @for(filter of activeFilterList; track $index) {
+        @for(filter of activeFilterList(); track $index) {
         <section class="badge-group badge-group--primary">
           <label>{{ filter.label }}</label>
           @for(value of filter.values; track $index) {
@@ -163,7 +163,7 @@
     }
     <section class="menu__body">
       <!-- Order section -->
-      @if(mode !== 'filter' && filterModalState === 'nav-menu') {
+      @if(mode() !== 'filter' && filterModalState === 'nav-menu') {
       <section
         (click)="filterModalState = 'order-menu'"
         class="order-btn dont-hide"
@@ -210,7 +210,7 @@
       </section>
       } @if(filterModalState === 'order-menu') {
       <section class="order-option-list dont-hide">
-        @for(option of orderConfig; track $index) {
+        @for(option of orderConfig(); track $index) {
         <span
           class="order-option-list__item dont-hide"
           (click)="onOrderChange(option.label, option.cat, 'asc')"
@@ -254,7 +254,7 @@
         [formControl]="filterSearchCtrl"
         class="input--text"
       />
-      } @if(mode !== 'order' && filterModalState === 'nav-menu') {
+      } @if(mode() !== 'order' && filterModalState === 'nav-menu') {
       <section class="filter-header">
         <svg
           xmlns="http://www.w3.org/2000/svg"
