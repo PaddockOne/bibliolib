@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, input } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, Renderer2, computed, input } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
@@ -70,8 +70,8 @@ export class BibliolibFilterComponent implements OnInit {
   rangeMinControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
   rangeMaxControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
 
-  filterConfigWithoutRangeItems: FilterConfig.IFullFilterItemConfig[] = [];
-  filterConfigWithRangeItems: FilterConfig.IFullFilterItemConfig[] = [];
+  filterConfigWithoutRangeItems = computed(() => this.filterConfig().filter(f => f.type !== 'numeric_range'));
+  filterConfigWithRangeItems = computed(() => this.filterConfig().filter(f => f.type === 'numeric_range'));;
 
   isMobileDisplay: boolean = false;
 
@@ -117,8 +117,6 @@ export class BibliolibFilterComponent implements OnInit {
 
       this.tempSelectedFilter = [...this.activeFilterList()];
 
-      this.filterConfigWithoutRangeItems = this.filterConfig().filter(f => f.type !== 'numeric_range');
-      this.filterConfigWithRangeItems = this.filterConfig().filter(f => f.type === 'numeric_range');
 
       this.dateRange = new FormGroup({
         start: this.startDateControl,

@@ -36,10 +36,10 @@
   </section>
   @if(activeFilterList().length > 0 && isMobileDisplay === false) {
   <section class="active-filter-list--desktop">
-    @for(filter of activeFilterList(); track $index) {
+    @for(filter of activeFilterList(); track filter) {
     <section class="badge-group badge-group--primary">
       <label>{{ filter.label }}</label>
-      @for(value of filter.values; track $index) {
+      @for(value of filter.values; track value) {
       <span
         class="badge badge--ico badge--md badge--primary"
         (click)="removeFilterItem(value, filter.label)"
@@ -118,10 +118,10 @@
     <section class="btn-reset-filter">
       @if(isMobileDisplay === true) {
       <section class="active-filter-list--mobile">
-        @for(filter of activeFilterList(); track $index) {
+        @for(filter of activeFilterList(); track filter) {
         <section class="badge-group badge-group--primary">
           <label>{{ filter.label }}</label>
-          @for(value of filter.values; track $index) {
+          @for(value of filter.values; track value) {
           <span
             class="badge badge--ico badge--md badge--primary"
             (click)="removeFilterItem(value, filter.label)"
@@ -210,7 +210,7 @@
       </section>
       } @if(filterModalState === 'order-menu') {
       <section class="order-option-list dont-hide">
-        @for(option of orderConfig(); track $index) {
+        @for(option of orderConfig(); track option) {
         <span
           class="order-option-list__item dont-hide"
           (click)="onOrderChange(option.label, option.cat, 'asc')"
@@ -281,7 +281,7 @@
       @if(filterConfig().length > 0) {
       <section class="filter-category-list">
         <!-- Filter category with check -->
-        @for(category of filterConfigWithoutRangeItems; track $index) {
+        @for(category of filterConfigWithoutRangeItems(); track category) {
         <div
           class="filter-category-list__item"
           (click)="handleCategoryClick($event, category)"
@@ -307,7 +307,7 @@
         </div>
         }
         <!-- Filter category for range -->
-        @for(item of filterConfigWithRangeItems; track $index) {
+        @for(item of filterConfigWithRangeItems(); track item) {
         <div
           class="filter-category-list__item range-item"
           [attr.type]="item.type"
@@ -339,7 +339,7 @@
       <!-- Filter category - list -->
       @if(filterModalState === 'filter-menu' && currentFilter.type === 'list') {
       <section class="filter-option-list">
-        @for(option of currentFilter.values; track $index) {
+        @for(option of currentFilter.values; track option) {
         <span
           class="filter-option-list__item"
           (click)="handleAddFilterValue(option)"
@@ -353,7 +353,7 @@
       <!-- Filter category - date -->
       @if(filterModalState === 'filter-menu' && currentFilter.type === 'date') {
       <section class="filter-option-date">
-        @for(date of dateListLabel; track $index) {
+        @for(date of dateListLabel; track date) {
         <span
           class="filter-option-date__item"
           (click)="addDateFilter(date.value)"
