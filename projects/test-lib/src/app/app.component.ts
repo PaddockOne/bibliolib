@@ -13,7 +13,7 @@ import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
 export class AppComponent {
   title = 'test-lib';
 
-  mode: 'filter' | 'order' | 'filter-order' = 'filter-order';
+  mode: 'filter' | 'order' | 'filter-order' | 'search-only' = 'search-only';
   orderConfig: FilterConfig.IOrderItemConfig[] = [
     { label: 'Date', cat: 'date' },
     { label: 'Sortie', cat: 'sortie' },

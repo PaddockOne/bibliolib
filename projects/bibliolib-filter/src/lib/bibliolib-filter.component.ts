@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, input } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
@@ -27,11 +27,11 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
   animations: getAnimations()
 })
 export class BibliolibFilterComponent implements OnInit {
-  @Input({ required: true }) mode!: 'filter' | 'order' | 'filter-order';
-  @Input() orderConfig: FilterConfig.IOrderItemConfig[] = [];
-  @Input() filterConfig: FilterConfig.IFullFilterItemConfig[] = [];
-  @Input() activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
-  @Input() lang: 'fr-FR' | 'en-US' = 'fr-FR';
+  mode = input.required<'filter' | 'order' | 'filter-order' | 'search-only'>();
+  orderConfig = input<FilterConfig.IOrderItemConfig[]>([]);
+  filterConfig = input<FilterConfig.IFullFilterItemConfig[]>([]);
+  activeFilterList = input<FilterConfig.IFullFilterItemConfig[]>([]);
+  lang = input<'fr-FR' | 'en-US'>('fr-FR');
 
   @Output() orderChange: EventEmitter<FilterConfig.IOrderItemForRequest> = new EventEmitter<FilterConfig.IOrderItemForRequest>();
   @Output() filterChange: EventEmitter<FilterConfig.IFullFilterItemConfig[]> = new EventEmitter<FilterConfig.IFullFilterItemConfig[]>();
@@ -78,48 +78,47 @@ export class BibliolibFilterComponent implements OnInit {
   dateListLabel = [
     {
       value: 'today',
-      label: this.lang === 'fr-FR' ? 'Aujourd\'hui' : 'Today'
+      label: this.lang() === 'fr-FR' ? 'Aujourd\'hui' : 'Today'
     },
     {
       value: 'yesterday',
-      label: this.lang === 'fr-FR' ? 'Hier' : 'Yesterday'
+      label: this.lang() === 'fr-FR' ? 'Hier' : 'Yesterday'
     },
     {
       value: 'week',
-      label: this.lang === 'fr-FR' ? 'Semaine en cours' : 'Current week'
+      label: this.lang() === 'fr-FR' ? 'Semaine en cours' : 'Current week'
     },
     {
       value: 'month',
-      label: this.lang === 'fr-FR' ? 'Mois en cours' : 'Current month'
+      label: this.lang() === 'fr-FR' ? 'Mois en cours' : 'Current month'
     },
     {
       value: 'trimester',
-      label: this.lang === 'fr-FR' ? 'Trimestre en cours' : 'Current trimester'
+      label: this.lang() === 'fr-FR' ? 'Trimestre en cours' : 'Current trimester'
     },
     {
       value: 'year',
-      label: this.lang === 'fr-FR' ? 'Année en cours' : 'Current year'
+      label: this.lang() === 'fr-FR' ? 'Année en cours' : 'Current year'
     }
   ]
-
 
   constructor( private renderer: Renderer2, private dateService: BibliolibFilterService) { }
 
   ngOnInit(): void {
-    if (this.mode === 'order' || this.mode === 'filter-order') {
+    if (this.mode() === 'order' || this.mode() === 'filter-order') {
       this.currentOrder = {
-        cat: this.orderConfig[0].cat,
-        label: this.orderConfig[0].label,
+        cat: this.orderConfig()[0].cat,
+        label: this.orderConfig()[0].label,
         direction: 'asc'
       }
     }
 
-    if (this.mode === 'filter' || this.mode === 'filter-order') {
+    if (this.mode() === 'filter' || this.mode() === 'filter-order') {
 
-      this.tempSelectedFilter = [...this.activeFilterList];
+      this.tempSelectedFilter = [...this.activeFilterList()];
 
-      this.filterConfigWithoutRangeItems = this.filterConfig.filter(f => f.type !== 'numeric_range');
-      this.filterConfigWithRangeItems = this.filterConfig.filter(f => f.type === 'numeric_range');
+      this.filterConfigWithoutRangeItems = this.filterConfig().filter(f => f.type !== 'numeric_range');
+      this.filterConfigWithRangeItems = this.filterConfig().filter(f => f.type === 'numeric_range');
 
       this.dateRange = new FormGroup({
         start: this.startDateControl,
@@ -134,14 +133,14 @@ export class BibliolibFilterComponent implements OnInit {
 
       this.filterSearchCtrl.valueChanges.subscribe(value => {
         if (value !== '') {
-          const _currentCategory = this.filterConfig.find(f => f.cat === this.currentFilter.cat);
+          const _currentCategory = this.filterConfig().find(f => f.cat === this.currentFilter.cat);
           if (_currentCategory) {
             const newValues = _currentCategory.values.filter(v => v.toLowerCase().includes(value.toLowerCase()));
             this.currentFilter = { ...this.currentFilter, values: newValues };
           }
         } else {
           // Si la valeur est vide, utilisez les valeurs d'origine de _currentCategory
-          const _currentCategory = this.filterConfig.find(f => f.cat === this.currentFilter.cat);
+          const _currentCategory = this.filterConfig().find(f => f.cat === this.currentFilter.cat);
           if (_currentCategory) {
             this.currentFilter = { ...this.currentFilter, values: _currentCategory.values };
           }
@@ -218,7 +217,7 @@ export class BibliolibFilterComponent implements OnInit {
    * @returns {string} 'Filtrer' | 'Trier' | 'Filtrer/Trier'
    */
   getFilterButtonLabel(): string {
-    switch (this.mode) {
+    switch (this.mode()) {
       case 'filter':
         return 'Filtrer';
       case 'order':
@@ -313,7 +312,7 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {string} cat catégorie du filtre
    */
   isCategoryActive(cat: string): boolean {
-    return this.activeFilterList.some(filter => filter.cat === cat);
+    return this.activeFilterList().some(filter => filter.cat === cat);
   }
 
   /**
@@ -321,7 +320,7 @@ export class BibliolibFilterComponent implements OnInit {
  * @param {string} cat catégorie du filtre
  */
   isValueActive(value: string): boolean {
-    return this.activeFilterList.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value)) || this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
+    return this.activeFilterList().some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value)) || this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
   }
 
   /**
