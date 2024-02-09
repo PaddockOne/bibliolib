@@ -102,4 +102,54 @@ export class AppComponent {
   onSearchChange(event: any) {
 
   }
+
+  changeFilterConfig() {
+    this.filterConfig = [
+      {
+        label: 'Date',
+        cat: 'date',
+        type: 'date',
+        values: []
+      },
+      {
+        label: 'Auteur',
+        cat: 'author',
+        type: 'list',
+        values: [
+          'Auteur 1',
+          'Auteur 2'
+        ]
+      },
+      {
+        label: 'Sortie',
+        cat: 'sortie',
+        type: 'check',
+        values: []
+      },
+      {
+        label: 'Prix',
+        cat: 'price',
+        type: 'numeric_range',
+        values: []
+      },
+      {
+        label: 'Prix2',
+        cat: 'price2',
+        type: 'numeric_range',
+        values: []
+      },
+      {
+        label: 'Prix3',
+        cat: 'price3',
+        type: 'numeric_range',
+        values: []
+      },
+      {
+        label: 'Prix4',
+        cat: 'price4',
+        type: 'numeric_range',
+        values: []
+      }
+    ];
+  }
 }
