@@ -123,8 +123,15 @@ export class BibliolibFilterComponent implements OnInit {
         end: this.endDateControl
       }, { updateOn: 'blur' });
 
-      this.dateRange.valueChanges.subscribe(value => {
-        if (value.start && value.end) {
+      this.dateRange.controls['start'].valueChanges.subscribe(value => {
+        if (value) {
+          this.dateRange.controls['end'].reset();
+          this.dateRange.controls['end'].updateValueAndValidity();
+        }
+      });
+
+      this.dateRange.controls['end'].valueChanges.subscribe(value => {
+        if (value &&  this.dateRange.controls['start'].value) {
           this.addDateFilter('custom');
         }
       });
