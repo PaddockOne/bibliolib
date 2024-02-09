@@ -27,7 +27,7 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
   animations: getAnimations()
 })
 export class BibliolibFilterComponent implements OnInit {
-  @Input({ required: true }) mode!: 'filter' | 'order' | 'filter-order';
+  @Input({ required: true }) mode!: 'filter' | 'order' | 'filter-order' | 'search-only';
   @Input() orderConfig: FilterConfig.IOrderItemConfig[] = [];
   @Input() filterConfig: FilterConfig.IFullFilterItemConfig[] = [];
   @Input() activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
@@ -101,7 +101,6 @@ export class BibliolibFilterComponent implements OnInit {
       label: this.lang === 'fr-FR' ? 'Année en cours' : 'Current year'
     }
   ]
-
 
   constructor( private renderer: Renderer2, private dateService: BibliolibFilterService) { }
 
