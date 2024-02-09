@@ -34,7 +34,7 @@
       </button>
     }
   </section>
-  @if(activeFilterList.length > 0 && isMobileDisplay === false) {
+  @if(activeFilterList().length > 0 && isMobileDisplay === false) {
   <section class="active-filter-list--desktop">
     @for(filter of activeFilterList(); track $index) {
     <section class="badge-group badge-group--primary">
@@ -114,7 +114,7 @@
         />
       </svg>
     </section>
-    @if(activeFilterList.length > 0) {
+    @if(activeFilterList().length > 0) {
     <section class="btn-reset-filter">
       @if(isMobileDisplay === true) {
       <section class="active-filter-list--mobile">
@@ -278,7 +278,7 @@
         <h3 class="text--lg text--bold primary-500 m-0">Filtrer</h3>
       </section>
       <!-- Filter category -->
-      @if(filterConfig.length > 0) {
+      @if(filterConfig().length > 0) {
       <section class="filter-category-list">
         <!-- Filter category with check -->
         @for(category of filterConfigWithoutRangeItems; track $index) {
