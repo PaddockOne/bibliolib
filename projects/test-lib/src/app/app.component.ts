@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
+import { BibliolibDatetimePickerComponent, DateTime } from 'bibliolib-datetime-picker';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, BibliolibFilterComponent],
+  imports: [CommonModule, RouterOutlet, BibliolibFilterComponent, BibliolibDatetimePickerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -87,6 +88,7 @@ export class AppComponent {
     }
   ];
   activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
+  dateSignal: WritableSignal<DateTime> = signal<DateTime>({date: '', hour: ''});
 
   constructor() { }
 
@@ -151,5 +153,13 @@ export class AppComponent {
         values: []
       }
     ];
+  }
+
+  onValueChange(value: DateTime) {
+    console.log(value);
+  }
+
+  updateValue() {
+    this.dateSignal.set({date: '2021-01-01', hour: '12:00'});
   }
 }
