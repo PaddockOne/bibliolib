@@ -10,18 +10,18 @@ npm install bibliolib-datetime-picker
 
 ## Usage
 
-Import the module in your app module:
+Import the component:
 
 ```typescript
-import { BibliolibDatetimePickerModule } from "bibliolib-datetime-picker";
+import { BibliolibDatetimePickerComponent } from "bibliolib-datetime-picker";
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, BibliolibDatetimePickerModule],
-  providers: [],
-  bootstrap: [AppComponent],
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [BibliolibDatetimePickerComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
-export class AppModule {}
 ```
 
 Use the component in your app:
