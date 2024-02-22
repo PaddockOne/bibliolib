@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, WritableSignal, effect, signal } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BibliolibDatetimePickerService } from './bibliolib-datetime-picker.service';
 
 export type DateTime = {
@@ -9,11 +9,19 @@ export type DateTime = {
 
 @Component({
   selector: 'bibliolib-datetime-picker',
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [BibliolibDatetimePickerService],
   template: `
     <section class="input-wrapper">
         <input class="datepickerClass" type="date" onfocus="this.showPicker()" [formControl]="dateCtrl">
         <select class="hourpickerClass" [formControl]="hourCtrl">
-          <option *ngFor="let hour of hourList" [value]="hour">{{hour}}</option>
+        @for(hour of hourList; track hour) {
+          <option [value]="hour">{{hour}}</option>
+        }
         </select>
     </section>
   `,
@@ -55,6 +63,13 @@ export class BibliolibDatetimePickerComponent {
   /**
    * @required
    * get the date and hour selected on change
+   * @type {WritableSignal<DateTime>}
+   * @memberof BibliolibDatetimePickerComponent
+  */
+  @Input() currentDate: WritableSignal<DateTime> = signal<DateTime>({date: '', hour: ''});
+  /**
+   * @required
+   * get the date and hour selected on change
    * @type {EventEmitter<DateTime>}
    * @memberof BibliolibDatetimePickerComponent
   */
@@ -65,7 +80,14 @@ export class BibliolibDatetimePickerComponent {
   hourCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
 
   hourList: string[] = [];
-  constructor(private dateTimeService: BibliolibDatetimePickerService) { }
+  constructor(private dateTimeService: BibliolibDatetimePickerService) {
+    effect(() => {
+      this.dateCtrl.setValue(this.currentDate().date, { emitEvent: false });
+      this.dateCtrl.updateValueAndValidity({ emitEvent: false });
+      this.hourCtrl.setValue(this.currentDate().hour, { emitEvent: false });
+      this.hourCtrl.updateValueAndValidity({ emitEvent: false});
+    });  
+   }
 
   ngOnInit(): void {
     this.hourList = this.dateTimeService.getHourList(this.startHours, this.endHours, this.stepHours);
@@ -78,3 +100,5 @@ export class BibliolibDatetimePickerComponent {
   }
 
 }
+
+
