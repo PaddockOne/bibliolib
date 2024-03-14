@@ -275,8 +275,7 @@ $gray-900: rgba(18, 25, 38, 1);
         width: 100%;
         top: 54.5px;
         z-index: 100;
-        display: grid;
-        grid-template-columns: 2fr 1fr;
+        display: flex;
         align-items: center;
         @media screen and (min-width: 768px) {
             @include Flex(flex-start, center);
@@ -285,9 +284,7 @@ $gray-900: rgba(18, 25, 38, 1);
         .searchbar {
             position: relative;
             @include Flex(center, center, $wrap: nowrap);
-            @media screen and (min-width: 768px) {
-                width: auto;
-            }
+            width: inherit;
             #before-svg {
                 position: absolute;
                 width: 25px;
@@ -387,9 +384,7 @@ $gray-900: rgba(18, 25, 38, 1);
             color: $primary-500;
             font-family: "Inter Tight", sans-serif;
             font-size: 0.875em;
-            @media screen and (min-width: 768px) {
-                width: auto;
-            }
+            width: fit-content;
             &:hover {
                 cursor: pointer;
                 background: $primary-500;
