@@ -63,7 +63,6 @@ export class BibliolibFilterComponent implements OnInit {
 
   filterSearchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
 
-  dateRange!: FormGroup;
   startDateControl: FormControl = new FormControl();
   endDateControl: FormControl = new FormControl();
 
@@ -117,21 +116,15 @@ export class BibliolibFilterComponent implements OnInit {
 
       this.tempSelectedFilter = [...this.activeFilterList()];
 
-
-      this.dateRange = new FormGroup({
-        start: this.startDateControl,
-        end: this.endDateControl
-      }, { updateOn: 'blur' });
-
-      this.dateRange.controls['start'].valueChanges.subscribe(value => {
+      this.startDateControl.valueChanges.subscribe(value => {
         if (value) {
-          this.dateRange.controls['end'].reset();
-          this.dateRange.controls['end'].updateValueAndValidity();
+          this.endDateControl.setValue(null, { emitEvent: false });
         }
       });
 
-      this.dateRange.controls['end'].valueChanges.subscribe(value => {
-        if (value &&  this.dateRange.controls['start'].value) {
+      this.endDateControl.valueChanges.subscribe(value => {
+        console.log('end date change');
+        if (value &&  this.startDateControl.value) {
           this.addDateFilter('custom');
         }
       });
@@ -208,7 +201,6 @@ export class BibliolibFilterComponent implements OnInit {
 
   removeFilterItem(value: string, label: string) {
     const filterIndex = this.tempSelectedFilter.findIndex(f => f.label === label);
-    console.log(filterIndex);
     if (this.tempSelectedFilter[filterIndex] && this.tempSelectedFilter[filterIndex].values.length === 1) {
       this.removeFilter(filterIndex);
     } else {
@@ -416,7 +408,8 @@ export class BibliolibFilterComponent implements OnInit {
 
   emitFilterChange() {
     this.filterChange.emit(this.tempSelectedFilter);
-    this.dateRange.reset();
+    this.startDateControl.setValue(null, {emitEvent: false});
+    this.endDateControl.setValue(null, {emitEvent: false});
   }
 
   /**
@@ -488,16 +481,16 @@ export class BibliolibFilterComponent implements OnInit {
     } else {
       if (!this.checkCurrentDateFilter(this.currentFilter.label)) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const startDate = new Date(this.dateRange.value.start.getFullYear(), this.dateRange.value.start.getMonth(), this.dateRange.value.start.getDate(), 0, 0, 0, 0);
-        const endDate = new Date(this.dateRange.value.end.getFullYear(), this.dateRange.value.end.getMonth(), this.dateRange.value.end.getDate(), 23, 59, 59, 0);
+        const startDate = new Date(this.startDateControl.value.getFullYear(), this.startDateControl.value.getMonth(), this.startDateControl.value.getDate(), 0, 0, 0, 0);
+        const endDate = new Date(this.endDateControl.value.getFullYear(), this.endDateControl.value.getMonth(), this.endDateControl.value.getDate(), 23, 59, 59, 0);
         const start = startDate.toLocaleString(undefined, { timeZone });
         const end = endDate.toLocaleString(undefined, { timeZone });
         this.createNewFilter(start + '|' + end);
       } else {
         const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const startDate = new Date(this.dateRange.value.start.getFullYear(), this.dateRange.value.start.getMonth(), this.dateRange.value.start.getDate(), 0, 0, 0, 0);
-        const endDate = new Date(this.dateRange.value.end.getFullYear(), this.dateRange.value.end.getMonth(), this.dateRange.value.end.getDate(), 23, 59, 59, 0);
+        const startDate = new Date(this.startDateControl.value.getFullYear(), this.startDateControl.value.getMonth(), this.startDateControl.value.getDate(), 0, 0, 0, 0);
+        const endDate = new Date(this.endDateControl.value.getFullYear(), this.endDateControl.value.getMonth(), this.endDateControl.value.getDate(), 23, 59, 59, 0);
         const start = startDate.toLocaleString(undefined, { timeZone });
         const end = endDate.toLocaleString(undefined, { timeZone });
         this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [start + '|' + end] };
