@@ -4,3 +4,4 @@
 
 export * from './lib/bibliolib-datetime-picker.service';
 export * from './lib/bibliolib-datetime-picker.component';
+export * from './lib/hour.directive';
