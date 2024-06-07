@@ -20,10 +20,10 @@
         type="search"
         results="5"
         placeholder="Rechercher"
-        [formControl]="filterSearchCtrl"
+        [formControl]="searchCtrl"
         class="primary-500"
       />
-      <button (click)="onSearchChange()" class="text--sm text--medium" [ngClass]="mode() === 'search-only' ? 'search-only' : ''">
+      <button class="text--sm text--medium" [ngClass]="mode() === 'search-only' ? 'search-only' : ''">
         Rechercher
       </button>
     </form>

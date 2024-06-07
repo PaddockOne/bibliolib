@@ -1,17 +1,17 @@
 {
   "name": "bibliolib-datetime-picker",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "license": "MIT",
   "author": {
     "name": "Reyvax reecded",
     "email": "xavier.deredec@live.fr"
   },
   "peerDependencies": {
-    "@angular/common": ">=17.1.0",
-    "@angular/core": ">=17.1.0"
+    "@angular/common": ">=17.1.0 || >=18.0.0",
+    "@angular/core": ">=17.1.0 || >=18.0.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.3"
   },
   "sideEffects": false
 }

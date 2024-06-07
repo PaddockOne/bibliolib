@@ -1,11 +1,11 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Inject } from '@angular/core';
 
 @Directive({
     selector: '[appHour]',
     standalone: true
 })
 export class HourDirective {
-    constructor(private el: ElementRef) { }
+    constructor(@Inject(ElementRef) private el: ElementRef) { }
 
     @HostListener('input', ['$event'])
     onInput(event: KeyboardEvent) {

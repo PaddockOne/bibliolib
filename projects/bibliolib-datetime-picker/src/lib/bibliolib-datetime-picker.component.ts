@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, WritableSignal, effect, signal } from '@angular/core';
+import { Component, InputSignal, OutputEmitterRef, WritableSignal, effect, input, output, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BibliolibDatetimePickerService } from './bibliolib-datetime-picker.service';
 import { HourDirective } from './hour.directive';
@@ -51,35 +51,35 @@ export class BibliolibDatetimePickerComponent {
    * default: 0
    * @type {number}
    */
-  @Input() startHours: number = 0;
+  startHours: InputSignal<number> = input(0);
   /**
    * @optional
    * specify the end hour of the hourpicker
    * default: 23
    * @type {number}
   */
-  @Input() endHours: number = 23;
+  endHours: InputSignal<number> = input(23);
   /**
    * @optional
    * specify the step hour of the hourpicker
    * default: 60
    * @type {number}
   */
-  @Input() stepHours: number = 60;
+  stepHours: InputSignal<number> = input(60);
   /**
    * @required
    * get the date and hour selected on change
    * @type {WritableSignal<DateTime>}
    * @memberof BibliolibDatetimePickerComponent
   */
-  @Input() currentDate: WritableSignal<DateTime> = signal<DateTime>({ date: '', hour: '' });
+  currentDate: InputSignal<DateTime> = input<DateTime>({ date: '', hour: '' });
   /**
    * @required
    * get the date and hour selected on change
    * @type {EventEmitter<DateTime>}
    * @memberof BibliolibDatetimePickerComponent
   */
-  @Output() dateChange: EventEmitter<DateTime> = new EventEmitter<DateTime>();
+  dateChange: OutputEmitterRef<DateTime> = output<DateTime>();
 
 
   dateCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
@@ -96,7 +96,7 @@ export class BibliolibDatetimePickerComponent {
   }
 
   ngOnInit(): void {
-    this.hourList = this.dateTimeService.getHourList(this.startHours, this.endHours, this.stepHours);
+    this.hourList = this.dateTimeService.getHourList(this.startHours(), this.endHours(), this.stepHours());
     this.dateCtrl.valueChanges.subscribe((value: string) => {
       this.dateChange.emit({ date: value, hour: this.hourCtrl.value });
     });

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output, Renderer2, computed, input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Inject, OnInit, Output, OutputEmitterRef, Renderer2, computed, input, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
@@ -33,9 +33,9 @@ export class BibliolibFilterComponent implements OnInit {
   activeFilterList = input<FilterConfig.IFullFilterItemConfig[]>([]);
   lang = input<'fr-FR' | 'en-US'>('fr-FR');
 
-  @Output() orderChange: EventEmitter<FilterConfig.IOrderItemForRequest> = new EventEmitter<FilterConfig.IOrderItemForRequest>();
-  @Output() filterChange: EventEmitter<FilterConfig.IFullFilterItemConfig[]> = new EventEmitter<FilterConfig.IFullFilterItemConfig[]>();
-  @Output() searchChange: EventEmitter<string> = new EventEmitter<string>();
+  orderChange: OutputEmitterRef<FilterConfig.IOrderItemForRequest> = output<FilterConfig.IOrderItemForRequest>();
+  filterChange: OutputEmitterRef<FilterConfig.IFullFilterItemConfig[]> = output<FilterConfig.IFullFilterItemConfig[]>();
+  searchChange: OutputEmitterRef<string> = output<string>();
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (this.filterModalState !== 'hidden') {
@@ -61,6 +61,7 @@ export class BibliolibFilterComponent implements OnInit {
 
   tempSelectedFilter: FilterConfig.IFullFilterItemConfig[] = [];
 
+  searchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
   filterSearchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
 
   startDateControl: FormControl = new FormControl();
@@ -101,7 +102,7 @@ export class BibliolibFilterComponent implements OnInit {
     }
   ]
 
-  constructor( private renderer: Renderer2, private dateService: BibliolibFilterService) { }
+  constructor( @Inject(Renderer2) private renderer: Renderer2, private dateService: BibliolibFilterService) { }
 
   ngOnInit(): void {
     if (this.mode() === 'order' || this.mode() === 'filter-order') {
@@ -123,7 +124,6 @@ export class BibliolibFilterComponent implements OnInit {
       });
 
       this.endDateControl.valueChanges.subscribe(value => {
-        console.log('end date change');
         if (value &&  this.startDateControl.value) {
           this.addDateFilter('custom');
         }
@@ -144,6 +144,12 @@ export class BibliolibFilterComponent implements OnInit {
           }
         }
 
+      });
+
+      this.searchCtrl.valueChanges.subscribe(value => {
+        if(value === '') {
+          this.searchChange.emit(value);
+        }
       });
 
       this.rangeMinControl.valueChanges.subscribe(value => {
@@ -575,6 +581,6 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
   onSearchChange() {
-    this.searchChange.emit(this.filterSearchCtrl.value);
+    this.searchChange.emit(this.searchCtrl.value);
   }
 }
