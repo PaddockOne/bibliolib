@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, OnInit, Output, Renderer2, computed, input } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
 import { BibliolibFilterService } from './bibliolib-filter.service';

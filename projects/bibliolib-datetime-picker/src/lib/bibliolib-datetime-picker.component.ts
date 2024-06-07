@@ -101,7 +101,9 @@ export class BibliolibDatetimePickerComponent {
       this.dateChange.emit({ date: value, hour: this.hourCtrl.value });
     });
     this.hourCtrl.valueChanges.subscribe((value: string) => {
-      this.dateChange.emit({ date: this.dateCtrl.value, hour: value });
+      if(value.length === 5) {
+        this.dateChange.emit({ date: this.dateCtrl.value, hour: value });
+      }
     });
   }
 
