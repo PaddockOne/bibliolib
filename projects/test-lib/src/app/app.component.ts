@@ -1,13 +1,14 @@
 import { Component, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
 import { BibliolibDatetimePickerComponent, DateTime } from 'bibliolib-datetime-picker';
+import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
+import { BibliolibGalleryComponent } from 'bibliolib-gallery';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, BibliolibFilterComponent, BibliolibDatetimePickerComponent],
+  imports: [CommonModule, RouterOutlet, BibliolibDatetimePickerComponent, BibliolibFilterComponent, BibliolibGalleryComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -90,6 +91,41 @@ export class AppComponent {
   activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
   dateSignal: WritableSignal<DateTime> = signal<DateTime>({date: '', hour: ''});
 
+  images: string [] = [
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+    'https://www.w3schools.com/w3images/nature.jpg',
+    'https://www.w3schools.com/w3images/mountains.jpg',
+    'https://www.w3schools.com/w3images/lights.jpg',
+  ];
+
   constructor() { }
 
   onOrderChange(event: any) {
@@ -102,7 +138,7 @@ export class AppComponent {
   }
 
   onSearchChange(event: any) {
-
+    console.log(event);
   }
 
   changeFilterConfig() {

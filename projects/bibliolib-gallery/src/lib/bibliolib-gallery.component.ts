@@ -1,40 +1,44 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, InputSignal, input } from '@angular/core';
 
 @Component({
   selector: 'bibliolib-gallery',
+  standalone: true,
   template: `
       <article
         class="gallery"
         [attr.nbr-photo]="
-          photoList.length < 5
-            ? photoList.length
+          photoList().length < 5
+            ? photoList().length
             : 'carousel'
         "
       >
+      @for(photo of photoList(); track i; let i = $index) {
         <section
           class="img-wrapper"
-          *ngFor="let photo of photoList; let i = index"
           [style]="i > 3 ? 'display: none;' : null"
-          [attr.length]="photoList.length - 4 + '+'"
+          [attr.length]="photoList().length - 4 + '+'"
           (click)="toggleZoomPhoto($event, i)"
         >
           <img draggable="false" [src]="photo" />
         </section>
+      }
       </article>
-      <article
-          (click)="toggleZoomPhoto($event, 0)"
-          class="gallery-zoom"
-          *ngIf="toggleZoom"
-        >
-          <span (click)="prevPhoto()" class="prev-btn no-close"><</span>
-          <img
-            *ngFor="let pic of photoZoomGallery; let i = index"
-            [src]="pic"
-            [style]="i != currentPhotoZoom ? 'display: none;' : null"
-            draggable="false"
-          />
-          <span (click)="nextPhoto()" class="next-btn no-close">></span>
-        </article>
+      @if(toggleZoom) {
+        <article
+            (click)="toggleZoomPhoto($event, 0)"
+            class="gallery-zoom"
+          >
+            <span (click)="prevPhoto()" class="prev-btn no-close"><</span>
+            @for(pic of photoZoomGallery; track i; let i = $index) {
+              <img
+                [src]="pic"
+                [style]="i != currentPhotoZoom ? 'display: none;' : null"
+                draggable="false"
+              />
+            }
+            <span (click)="nextPhoto()" class="next-btn no-close">></span>
+          </article>
+      }
   `,
   styles: [
     `
@@ -197,7 +201,7 @@ export class BibliolibGalleryComponent {
   * Specify a list of photos to display in the gallery.
   * @type string[]
   */
-  @Input({ required: true }) photoList!: string[];
+  photoList: InputSignal<string[]> = input<string[]>([]);
   /**
   * @optional
   * Specify a list of photos to display in the zoom carousel.
@@ -205,25 +209,25 @@ export class BibliolibGalleryComponent {
   * If not specified, the list of photos will be the same as the list of photos in the gallery.
   * @type string[]
   */
-  @Input() currentPhotoZoomGallery!: string[];
+  currentPhotoZoomGallery!: InputSignal<string[]>;
 
   currentPhotoZoom: number = 0;
   toggleZoom: boolean = false;
   photoZoomGallery: string[] = [];
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    if(this.toggleZoom) {
+    if (this.toggleZoom) {
       this.toggleZoom = false;
     }
   }
 
   @HostListener('document:keydown.arrowleft', ['$event']) onKeydownLeftHandler(event: KeyboardEvent) {
-    if(this.toggleZoom) {
+    if (this.toggleZoom) {
       this.prevPhoto();
     }
   }
   @HostListener('document:keydown.arrowright', ['$event']) onKeydownRightHandler(event: KeyboardEvent) {
-    if(this.toggleZoom) {
+    if (this.toggleZoom) {
       this.nextPhoto();
     }
   }
@@ -235,7 +239,7 @@ export class BibliolibGalleryComponent {
       return
     }
     this.currentPhotoZoom = index;
-    this.photoZoomGallery = this.currentPhotoZoomGallery || this.photoList;
+    this.photoZoomGallery = this.currentPhotoZoomGallery ? this.currentPhotoZoomGallery() : this.photoList();
     this.toggleZoom = !this.toggleZoom;
   }
 

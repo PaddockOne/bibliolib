@@ -3,4 +3,3 @@
  */
 
 export * from './lib/bibliolib-gallery.component';
-export * from './lib/bibliolib-gallery.module';
