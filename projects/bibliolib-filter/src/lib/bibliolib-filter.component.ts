@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Inject, OnInit, Output, OutputEmitterRef, Renderer2, computed, input, output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Inject, OnInit, Output, OutputEmitterRef, Renderer2, computed, effect, input, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
@@ -102,7 +102,13 @@ export class BibliolibFilterComponent implements OnInit {
     }
   ]
 
-  constructor( @Inject(Renderer2) private renderer: Renderer2, private dateService: BibliolibFilterService) { }
+  constructor( @Inject(Renderer2) private renderer: Renderer2, private dateService: BibliolibFilterService) {
+    effect(() => {
+      if (this.mode() === 'filter' || this.mode() === 'filter-order') {
+        this.tempSelectedFilter = [...this.activeFilterList()];
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (this.mode() === 'order' || this.mode() === 'filter-order') {
