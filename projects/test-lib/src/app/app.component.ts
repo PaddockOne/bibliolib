@@ -70,21 +70,9 @@ export class AppComponent {
       values: []
     },
     {
-      label: 'Prix2',
-      cat: 'price2',
-      type: 'numeric_range',
-      values: []
-    },
-    {
-      label: 'Prix3',
-      cat: 'price3',
-      type: 'numeric_range',
-      values: []
-    },
-    {
-      label: 'Prix4',
-      cat: 'price4',
-      type: 'numeric_range',
+      label: 'Commentaire',
+      cat: 'comment',
+      type: 'nullOrNot',
       values: []
     }
   ];
@@ -171,21 +159,9 @@ export class AppComponent {
         values: []
       },
       {
-        label: 'Prix2',
-        cat: 'price2',
-        type: 'numeric_range',
-        values: []
-      },
-      {
-        label: 'Prix3',
-        cat: 'price3',
-        type: 'numeric_range',
-        values: []
-      },
-      {
-        label: 'Prix4',
-        cat: 'price4',
-        type: 'numeric_range',
+        label: 'Commentaire',
+        cat: 'comment',
+        type: 'nullOrNot',
         values: []
       }
     ];
