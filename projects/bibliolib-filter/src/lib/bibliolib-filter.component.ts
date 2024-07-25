@@ -510,6 +510,23 @@ export class BibliolibFilterComponent implements OnInit {
     }
   }
 
+  /**
+   * Ajoute un filtre de type avec/sans à la liste des filtres temporaires en fonction de la valeur spécifiée
+   * @param {string} value La valeur du filtre de type avec/sans à ajouter
+   */
+  addNullOrNotFilter(value: string) {
+    if (!this.checkIfFilterIsInTemp()) {
+      this.createNewFilter(value);
+    } else {
+      const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
+      this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [value] };
+    }
+  }
+
+  isValueNullOrNotActive(value: string): boolean {
+    return this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
+  }
+
   setCurrentFilter(value: FilterConfig.IFullFilterItemConfig) {
     this.currentFilter = value;
   }
