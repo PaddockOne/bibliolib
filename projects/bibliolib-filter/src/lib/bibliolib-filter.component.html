@@ -350,6 +350,17 @@
         }
       </section>
       }
+      <!-- Filter category - nullOrNot -->
+      @if (filterModalState === 'filter-menu' && currentFilter.type === 'nullOrNot') {
+        <section class="filter-option-list">
+          <span class="filter-option-list__item" (click)="addNullOrNotFilter('avec')" [class.selected]="isValueNullOrNotActive('avec')">
+            <p class="text--md text--regular primary-500">Avec</p>
+          </span>
+          <span class="filter-option-list__item" (click)="addNullOrNotFilter('sans')" [class.selected]="isValueNullOrNotActive('sans')">
+            <p class="text--md text--regular primary-500">Sans</p>
+          </span>
+        </section>
+      }
       <!-- Filter category - date -->
       @if(filterModalState === 'filter-menu' && currentFilter.type === 'date') {
       <section class="filter-option-date">

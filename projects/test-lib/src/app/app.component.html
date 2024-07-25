@@ -1,3 +1,4 @@
+<!-- filter -->
 <bibliolib-filter
     [mode]="'filter'"
     [orderConfig]="orderConfig"
@@ -12,11 +13,14 @@
 
 <p>{{ filterConfig[1].label }}: {{ filterConfig[1].values.length }}</p>
 
-<bibliolib-datetime-picker (dateChange)="onValueChange($event)" [currentDate]="dateSignal()" />
 
-<button (click)="updateValue()">update</button>
+<!-- datetime picker -->
+<!-- <bibliolib-datetime-picker (dateChange)="onValueChange($event)" [currentDate]="dateSignal()" />
+
+<button (click)="updateValue()">update</button> -->
 
 
-<section class="gallery-container">
+<!-- gallery -->
+<!-- <section class="gallery-container">
     <bibliolib-gallery [photoList]="images" />
-</section>
+</section> -->
