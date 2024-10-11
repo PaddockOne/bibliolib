@@ -35,7 +35,7 @@ export declare module FilterConfig {
          * The type of the filter item.
          * Can be one of 'list', 'date', 'nullOrNot', 'numeric_range', or 'check'.
          */
-        type: string;
+        type: 'list' | 'date' | 'nullOrNot' | 'numeric_range' | 'check';
     }
 
     /**
