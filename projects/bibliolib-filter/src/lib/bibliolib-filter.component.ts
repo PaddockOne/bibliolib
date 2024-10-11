@@ -28,13 +28,13 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
 })
 export class BibliolibFilterComponent implements OnInit {
   mode = input.required<'filter' | 'order' | 'filter-order' | 'search-only'>();
-  orderConfig = input<FilterConfig.IOrderItemConfig[]>([]);
-  filterConfig = input<FilterConfig.IFullFilterItemConfig[]>([]);
-  activeFilterList = input<FilterConfig.IFullFilterItemConfig[]>([]);
+  orderConfig = input<FilterConfig.OrderItemConfig[]>([]);
+  filterConfig = input<FilterConfig.FullFilterItemConfig[]>([]);
+  activeFilterList = input<FilterConfig.FullFilterItemConfig[]>([]);
   lang = input<'fr-FR' | 'en-US'>('fr-FR');
 
-  orderChange: OutputEmitterRef<FilterConfig.IOrderItemForRequest> = output<FilterConfig.IOrderItemForRequest>();
-  filterChange: OutputEmitterRef<FilterConfig.IFullFilterItemConfig[]> = output<FilterConfig.IFullFilterItemConfig[]>();
+  orderChange: OutputEmitterRef<FilterConfig.OrderItemForRequest> = output<FilterConfig.OrderItemForRequest>();
+  filterChange: OutputEmitterRef<FilterConfig.FullFilterItemConfig[]> = output<FilterConfig.FullFilterItemConfig[]>();
   searchChange: OutputEmitterRef<string> = output<string>();
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -56,10 +56,10 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
   filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' = 'hidden';
-  currentOrder!: FilterConfig.IOrderItemForRequest;
-  currentFilter!: FilterConfig.IFullFilterItemConfig;
+  currentOrder!: FilterConfig.OrderItemForRequest;
+  currentFilter!: FilterConfig.FullFilterItemConfig;
 
-  tempSelectedFilter: FilterConfig.IFullFilterItemConfig[] = [];
+  tempSelectedFilter: FilterConfig.FullFilterItemConfig[] = [];
 
   searchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
   filterSearchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
@@ -296,9 +296,9 @@ export class BibliolibFilterComponent implements OnInit {
   /**
    * Permet de déclencher le bon évènement en fonction du type de filtre
    * @param {Event} e Event
-   * @param {FilterConfig.IOrderItemConfig} order FilterConfig.IOrderItemConfig
+   * @param {FilterConfig.OrderItemConfig} order FilterConfig.OrderItemConfig
    */
-  handleCategoryClick(e: Event, filter: FilterConfig.IFullFilterItemConfig) {
+  handleCategoryClick(e: Event, filter: FilterConfig.FullFilterItemConfig) {
     e.stopPropagation();
     switch (filter.type) {
       case 'check':
@@ -527,7 +527,7 @@ export class BibliolibFilterComponent implements OnInit {
     return this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
   }
 
-  setCurrentFilter(value: FilterConfig.IFullFilterItemConfig) {
+  setCurrentFilter(value: FilterConfig.FullFilterItemConfig) {
     this.currentFilter = value;
   }
 

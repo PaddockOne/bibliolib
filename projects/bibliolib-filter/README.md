@@ -76,17 +76,17 @@ Use the component in your app.component.html
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | mode | string | 'filter-order' | The mode of the filter. Can be 'filter', 'order' or 'filter-order'. |
-| orderConfig | FilterConfig.IOrderItemConfig[] | [] | The configuration of the order. |
-| filterConfig | FilterConfig.IFullFilterItemConfig[] | [] | The configuration of the filter. |
-| activeFilterList | FilterConfig.IFullFilterItemConfig[] | [] | The list of active filters. |
+| orderConfig | FilterConfig.OrderItemConfig[] | [] | The configuration of the order. |
+| filterConfig | FilterConfig.FullFilterItemConfig[] | [] | The configuration of the filter. |
+| activeFilterList | FilterConfig.FullFilterItemConfig[] | [] | The list of active filters. |
 | lang | string | 'fr-FR' | The language of the filter : 'fr-FR' or 'en-US'. |
 
 ## Outputs
 
 | Name | Type | Description |
 | --- | --- | --- |
-| orderChange | EventEmitter<FilterConfig.IOrderItemForRequest> | The event emitted when the order is changed. |
-| filterChange | EventEmitter<FilterConfig.IFullFilterItemConfig[]> | The event emitted when the filter is changed. |
+| orderChange | EventEmitter<FilterConfig.OrderItemForRequest> | The event emitted when the order is changed. |
+| filterChange | EventEmitter<FilterConfig.FullFilterItemConfig[]> | The event emitted when the filter is changed. |
 | searchChange | EventEmitter<string> | The event emitted when the search input is changed. |
 
 # License

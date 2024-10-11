@@ -5,7 +5,7 @@ export declare module FilterConfig {
     /**
      * Interface representing the configuration for an order item.
      */
-    interface IOrderItemConfig {
+    interface OrderItemConfig {
         /**
          * The label of the order item.
          */
@@ -20,7 +20,7 @@ export declare module FilterConfig {
     /**
      * Interface representing the configuration for an order item request.
      */
-    interface IOrderItemForRequest extends IOrderItemConfig {
+    interface OrderItemForRequest extends OrderItemConfig {
         /**
          * The direction of the order, either ascending ('asc') or descending ('desc').
          */
@@ -30,7 +30,7 @@ export declare module FilterConfig {
     /**
      * Interface representing the configuration for a filter item.
      */
-    interface IFilterItemConfig extends IOrderItemConfig {
+    interface FilterItemConfig extends OrderItemConfig {
         /**
          * The type of the filter item.
          * Can be one of 'list', 'date', 'nullOrNot', 'numeric_range', or 'check'.
@@ -41,7 +41,7 @@ export declare module FilterConfig {
     /**
      * Interface representing the full configuration for a filter item.
      */
-    interface IFullFilterItemConfig extends IFilterItemConfig {
+    interface FullFilterItemConfig extends FilterItemConfig {
         /**
          * The values associated with the filter item.
          */

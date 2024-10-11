@@ -16,12 +16,12 @@ export class AppComponent {
   title = 'test-lib';
 
   mode: 'filter' | 'order' | 'filter-order' | 'search-only' = 'search-only';
-  orderConfig: FilterConfig.IOrderItemConfig[] = [
+  orderConfig: FilterConfig.OrderItemConfig[] = [
     { label: 'Date', cat: 'date' },
     { label: 'Sortie', cat: 'sortie' },
     { label: 'Auteur', cat: 'author' }
   ];
-  filterConfig: FilterConfig.IFullFilterItemConfig[] = [
+  filterConfig: FilterConfig.FullFilterItemConfig[] = [
     {
       label: 'Date',
       cat: 'date',
@@ -76,7 +76,7 @@ export class AppComponent {
       values: []
     }
   ];
-  activeFilterList: FilterConfig.IFullFilterItemConfig[] = [];
+  activeFilterList: FilterConfig.FullFilterItemConfig[] = [];
   dateSignal: WritableSignal<DateTime> = signal<DateTime>({date: '', hour: ''});
 
   images: string [] = [
@@ -120,7 +120,7 @@ export class AppComponent {
 
   }
 
-  onFilterChange(event: FilterConfig.IFullFilterItemConfig[]) {
+  onFilterChange(event: FilterConfig.FullFilterItemConfig[]) {
     console.log(event); 
     this.activeFilterList = [...event].slice();
   }
