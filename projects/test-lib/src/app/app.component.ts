@@ -122,7 +122,7 @@ export class AppComponent {
 
   onFilterChange(event: FilterConfig.FullFilterItemConfig[]) {
     console.log(event); 
-    this.activeFilterList = [...event].slice();
+    this.activeFilterList = [...event];
   }
 
   onSearchChange(event: any) {
