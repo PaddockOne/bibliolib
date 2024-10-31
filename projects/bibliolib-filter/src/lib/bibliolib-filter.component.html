@@ -36,31 +36,35 @@
   </section>
   @if(activeFilterList().length > 0 && isMobileDisplay === false) {
   <section class="active-filter-list--desktop">
-    @for(filter of activeFilterList(); track filter) {
-    <section class="badge-group badge-group--primary">
-      <label>{{ filter.label }}</label>
-      @for(value of filter.values; track value) {
-      <span
-        class="badge badge--ico badge--md badge--primary"
-        (click)="removeFilterItem(value, filter.label)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          preserveAspectRatio="xMidYMid meet"
-          viewBox="0 0 15 15"
-          class="clickable"
-        >
-          <path
-            fill="currentColor"
-            d="M3.64 2.27L7.5 6.13l3.84-3.84A.92.92 0 0 1 12 2a1 1 0 0 1 1 1a.9.9 0 0 1-.27.66L8.84 7.5l3.89 3.89A.9.9 0 0 1 13 12a1 1 0 0 1-1 1a.92.92 0 0 1-.69-.27L7.5 8.87l-3.85 3.85A.92.92 0 0 1 3 13a1 1 0 0 1-1-1a.9.9 0 0 1 .27-.66L6.16 7.5L2.27 3.61A.9.9 0 0 1 2 3a1 1 0 0 1 1-1c.24.003.47.1.64.27Z"
-          />
-        </svg>
-        {{ getFormattedFilterValue(filter.type, value) }}
-      </span>
+    @for(filter of activeFilterList(); track $index) {
+      @if((filter.type === 'check' && filter.values[0] !== 'f') || filter.type !== 'check') {
+      <section class="badge-group badge-group--primary">
+        <label>{{ filter.label }}</label>
+        @for(value of filter.values; track $index) {
+            <span
+              class="badge badge--ico badge--md badge--primary"
+              (click)="removeFilterItem(value, filter.label, filter.type)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 15 15"
+                class="clickable"
+              >
+                <path
+                  fill="currentColor"
+                  d="M3.64 2.27L7.5 6.13l3.84-3.84A.92.92 0 0 1 12 2a1 1 0 0 1 1 1a.9.9 0 0 1-.27.66L8.84 7.5l3.89 3.89A.9.9 0 0 1 13 12a1 1 0 0 1-1 1a.92.92 0 0 1-.69-.27L7.5 8.87l-3.85 3.85A.92.92 0 0 1 3 13a1 1 0 0 1-1-1a.9.9 0 0 1 .27-.66L6.16 7.5L2.27 3.61A.9.9 0 0 1 2 3a1 1 0 0 1 1-1c.24.003.47.1.64.27Z"
+                />
+              </svg>
+              @if ((filter.type === 'check' && filter.values[0] !== 't') || filter.type !== 'check') {
+                <p>{{ getFormattedFilterValue(filter.type, value) }}</p>
+              }
+            </span>
+          }
+        </section>
       }
-    </section>
     }
   </section>
   }
@@ -118,31 +122,35 @@
     <section class="btn-reset-filter">
       @if(isMobileDisplay === true) {
       <section class="active-filter-list--mobile">
-        @for(filter of activeFilterList(); track filter) {
-        <section class="badge-group badge-group--primary">
-          <label>{{ filter.label }}</label>
-          @for(value of filter.values; track value) {
-          <span
-            class="badge badge--ico badge--md badge--primary"
-            (click)="removeFilterItem(value, filter.label)"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              preserveAspectRatio="xMidYMid meet"
-              viewBox="0 0 15 15"
-              class="clickable"
-            >
-              <path
-                fill="currentColor"
-                d="M3.64 2.27L7.5 6.13l3.84-3.84A.92.92 0 0 1 12 2a1 1 0 0 1 1 1a.9.9 0 0 1-.27.66L8.84 7.5l3.89 3.89A.9.9 0 0 1 13 12a1 1 0 0 1-1 1a.92.92 0 0 1-.69-.27L7.5 8.87l-3.85 3.85A.92.92 0 0 1 3 13a1 1 0 0 1-1-1a.9.9 0 0 1 .27-.66L6.16 7.5L2.27 3.61A.9.9 0 0 1 2 3a1 1 0 0 1 1-1c.24.003.47.1.64.27Z"
-              />
-            </svg>
-            {{ getFormattedFilterValue(filter.type, value) }}
-          </span>
+        @for(filter of activeFilterList(); track $index) {
+          @if((filter.type === 'check' && filter.values[0] !== 'f') || filter.type !== 'check') {
+            <section class="badge-group badge-group--primary">
+              <label>{{ filter.label }}</label>
+              @for(value of filter.values; track $index) {
+              <span
+                class="badge badge--ico badge--md badge--primary"
+                (click)="removeFilterItem(value, filter.label, filter.type)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  preserveAspectRatio="xMidYMid meet"
+                  viewBox="0 0 15 15"
+                  class="clickable"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M3.64 2.27L7.5 6.13l3.84-3.84A.92.92 0 0 1 12 2a1 1 0 0 1 1 1a.9.9 0 0 1-.27.66L8.84 7.5l3.89 3.89A.9.9 0 0 1 13 12a1 1 0 0 1-1 1a.92.92 0 0 1-.69-.27L7.5 8.87l-3.85 3.85A.92.92 0 0 1 3 13a1 1 0 0 1-1-1a.9.9 0 0 1 .27-.66L6.16 7.5L2.27 3.61A.9.9 0 0 1 2 3a1 1 0 0 1 1-1c.24.003.47.1.64.27Z"
+                  />
+                </svg>
+                @if ((filter.type === 'check' && filter.values[0] !== 't') || filter.type !== 'check') {
+                  <p>{{ getFormattedFilterValue(filter.type, value) }}</p>
+                }
+              </span>
+              }
+            </section>
           }
-        </section>
         }
       </section>
       }
@@ -210,7 +218,7 @@
       </section>
       } @if(filterModalState === 'order-menu') {
       <section class="order-option-list dont-hide">
-        @for(option of orderConfig(); track option) {
+        @for(option of orderConfig(); track $index) {
         <span
           class="order-option-list__item dont-hide"
           (click)="onOrderChange(option.label, option.cat, 'asc')"
@@ -281,12 +289,12 @@
       @if(filterConfig().length > 0) {
       <section class="filter-category-list">
         <!-- Filter category with check -->
-        @for(category of filterConfigWithoutRangeItems(); track category) {
+        @for(category of filterConfigWithoutRangeItems(); track $index) {
         <div
           class="filter-category-list__item"
           (click)="handleCategoryClick($event, category)"
           [attr.type]="category.type"
-          [class.selected]="isCategoryActive(category.cat)"
+          [class.selected]="isCategoryActive(category.cat, category.type)"
         >
           <p class="text--md text--regular primary-500">{{ category.label }}</p>
           @if(category.type !== 'check') {
@@ -307,11 +315,11 @@
         </div>
         }
         <!-- Filter category for range -->
-        @for(item of filterConfigWithRangeItems(); track item) {
+        @for(item of filterConfigWithRangeItems(); track $index) {
         <div
           class="filter-category-list__item range-item"
           [attr.type]="item.type"
-          [class.selected]="isCategoryActive(item.cat)"
+          [class.selected]="isCategoryActive(item.cat, item.type)"
         >
           <p class="text--md text--regular primary-500">{{ item.label }}</p>
           <section class="input-container">
@@ -339,7 +347,7 @@
       <!-- Filter category - list -->
       @if(filterModalState === 'filter-menu' && currentFilter.type === 'list') {
       <section class="filter-option-list">
-        @for(option of currentFilter.values; track option) {
+        @for(option of currentFilter.values; track $index) {
         <span
           class="filter-option-list__item"
           (click)="handleAddFilterValue(option)"
@@ -364,7 +372,7 @@
       <!-- Filter category - date -->
       @if(filterModalState === 'filter-menu' && currentFilter.type === 'date') {
       <section class="filter-option-date">
-        @for(date of dateListLabel; track date) {
+        @for(date of dateListLabel; track $index) {
         <span
           class="filter-option-date__item"
           (click)="addDateFilter(date.value)"
