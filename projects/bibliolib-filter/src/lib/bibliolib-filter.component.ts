@@ -105,7 +105,7 @@ export class BibliolibFilterComponent implements OnInit {
   constructor( @Inject(Renderer2) private renderer: Renderer2, private dateService: BibliolibFilterService) {
     effect(() => {
       if (this.mode() === 'filter' || this.mode() === 'filter-order') {
-        this.tempSelectedFilter = [...this.activeFilterList()];
+        this.addDefaultValueToCheckFilter()
       }
     });
   }
@@ -190,6 +190,22 @@ export class BibliolibFilterComponent implements OnInit {
     });
   }
 
+  addDefaultValueToCheckFilter() {
+    const allCheckFilters = this.filterConfig().filter(f => f.type === 'check').map(c => c.cat);
+    this.tempSelectedFilter = [...this.activeFilterList()];
+
+    allCheckFilters.forEach(cat => {
+      if (!this.tempSelectedFilter.some(f => f.cat === cat)) {
+        this.tempSelectedFilter.push({
+          cat: cat,
+          label: this.filterConfig().find(f => f.cat === cat)?.label || '',
+          type: 'check',
+          values: ['f']
+        });
+      }
+    })
+  }
+
   onOrderChange(label: string, cat: string, direction: 'asc' | 'desc') {
     this.currentOrder = {
       label: label,
@@ -211,9 +227,11 @@ export class BibliolibFilterComponent implements OnInit {
     this.onStateChange();
   }
 
-  removeFilterItem(value: string, label: string) {
+  removeFilterItem(value: string, label: string, type: string) {
     const filterIndex = this.tempSelectedFilter.findIndex(f => f.label === label);
-    if (this.tempSelectedFilter[filterIndex] && this.tempSelectedFilter[filterIndex].values.length === 1) {
+    if (type === 'check') {
+      this.tempSelectedFilter[filterIndex] = { ...this.tempSelectedFilter[filterIndex], values: ['f'] };
+    } else if (this.tempSelectedFilter[filterIndex] && this.tempSelectedFilter[filterIndex].values.length === 1) {
       this.removeFilter(filterIndex);
     } else {
       this.removeValueFromExistingFilter(filterIndex, value);
@@ -302,11 +320,13 @@ export class BibliolibFilterComponent implements OnInit {
     e.stopPropagation();
     switch (filter.type) {
       case 'check':
-        if (this.isCategoryActive(filter.cat)) {
-          this.tempSelectedFilter = this.tempSelectedFilter.filter(f => f.cat !== filter.cat);
-        } else {
-          this.tempSelectedFilter.push(filter);
-        }
+        this.tempSelectedFilter = this.tempSelectedFilter.map(f => {
+          if (f.cat === filter.cat) {
+            return { ...f, values: f.values[0] === 't' ? f.values = ['f'] : f.values = ['t'] };
+          } else {
+            return f;
+          }
+        });
         this.filterChange.emit(this.tempSelectedFilter);
         break;
       default:
@@ -319,9 +339,14 @@ export class BibliolibFilterComponent implements OnInit {
   /**
    * Permet de savoir si la catégorie du filtre est active
    * @param {string} cat catégorie du filtre
+   * @param {string} type type du filtre
    */
-  isCategoryActive(cat: string): boolean {
-    return this.activeFilterList().some(filter => filter.cat === cat);
+  isCategoryActive(cat: string, type: string): boolean {
+    if (type === 'check') {
+      return this.tempSelectedFilter.some(filter => filter.cat === cat && filter.values[0] === 't');
+    } else {
+      return this.activeFilterList().some(filter => filter.cat === cat);
+    }
   }
 
   /**
