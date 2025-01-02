@@ -1,4 +1,18 @@
-import { Component, EventEmitter, HostListener, Inject, OnInit, Output, OutputEmitterRef, Renderer2, computed, effect, input, output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  HostListener,
+  Inject,
+  OnInit,
+  Output,
+  OutputEmitterRef,
+  Renderer2,
+  computed,
+  effect,
+  input,
+  output,
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
@@ -21,23 +35,32 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
   ],
   providers: [TitleCasePipe, OnlyNumbersDirective],
-  animations: getAnimations()
+  animations: getAnimations(),
 })
-export class BibliolibFilterComponent implements OnInit {
+export class BibliolibFilterComponent implements OnInit, AfterViewInit {
   mode = input.required<'filter' | 'order' | 'filter-order' | 'search-only'>();
   orderConfig = input<FilterConfig.OrderItemConfig[]>([]);
   filterConfig = input<FilterConfig.FullFilterItemConfig[]>([]);
   activeFilterList = input<FilterConfig.FullFilterItemConfig[]>([]);
   lang = input<'fr-FR' | 'en-US'>('fr-FR');
 
-  orderChange: OutputEmitterRef<FilterConfig.OrderItemForRequest> = output<FilterConfig.OrderItemForRequest>();
-  filterChange: OutputEmitterRef<FilterConfig.FullFilterItemConfig[]> = output<FilterConfig.FullFilterItemConfig[]>();
+  orderChange: OutputEmitterRef<FilterConfig.OrderItemForRequest> =
+    output<FilterConfig.OrderItemForRequest>();
+  filterChange: OutputEmitterRef<FilterConfig.FullFilterItemConfig[]> =
+    output<FilterConfig.FullFilterItemConfig[]>();
   searchChange: OutputEmitterRef<string> = output<string>();
 
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  @HostListener('window:resize', [])
+  onWindowResize(): void {
+    this.updateCSSVariable();
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
     if (this.filterModalState !== 'hidden') {
       this.filterModalState = 'hidden';
       this.onStateChange();
@@ -47,7 +70,11 @@ export class BibliolibFilterComponent implements OnInit {
   @HostListener('document:click', ['$event']) clickout(event: Event) {
     const targettedElement = event.target as HTMLElement;
 
-    if (this.filterModalState !== 'hidden' && !this.isChildOfMenu(event, '.menu') && !this.isChildOfMenu(event, '.mat-datepicker-content')) {
+    if (
+      this.filterModalState !== 'hidden' &&
+      !this.isChildOfMenu(event, '.menu') &&
+      !this.isChildOfMenu(event, '.mat-datepicker-content')
+    ) {
       if (!targettedElement.classList.contains('dont-hide')) {
         this.filterModalState = 'hidden';
         this.onStateChange();
@@ -55,57 +82,76 @@ export class BibliolibFilterComponent implements OnInit {
     }
   }
 
-  filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' = 'hidden';
+  filterModalState: 'hidden' | 'nav-menu' | 'order-menu' | 'filter-menu' =
+    'hidden';
   currentOrder!: FilterConfig.OrderItemForRequest;
   currentFilter!: FilterConfig.FullFilterItemConfig;
 
   tempSelectedFilter: FilterConfig.FullFilterItemConfig[] = [];
 
-  searchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
-  filterSearchCtrl: FormControl<string> = new FormControl<string>('', { nonNullable: true });
+  searchCtrl: FormControl<string> = new FormControl<string>('', {
+    nonNullable: true,
+  });
+  filterSearchCtrl: FormControl<string> = new FormControl<string>('', {
+    nonNullable: true,
+  });
 
   startDateControl: FormControl = new FormControl();
   endDateControl: FormControl = new FormControl();
 
-  rangeMinControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
-  rangeMaxControl: FormControl = new FormControl('', { nonNullable: true, updateOn: 'blur' });
+  rangeMinControl: FormControl = new FormControl('', {
+    nonNullable: true,
+    updateOn: 'blur',
+  });
+  rangeMaxControl: FormControl = new FormControl('', {
+    nonNullable: true,
+    updateOn: 'blur',
+  });
 
-  filterConfigWithoutRangeItems = computed(() => this.filterConfig().filter(f => f.type !== 'numeric_range'));
-  filterConfigWithRangeItems = computed(() => this.filterConfig().filter(f => f.type === 'numeric_range'));;
+  filterConfigWithoutRangeItems = computed(() =>
+    this.filterConfig().filter((f) => f.type !== 'numeric_range')
+  );
+  filterConfigWithRangeItems = computed(() =>
+    this.filterConfig().filter((f) => f.type === 'numeric_range')
+  );
 
   isMobileDisplay: boolean = false;
 
   dateListLabel = [
     {
       value: 'today',
-      label: this.lang() === 'fr-FR' ? 'Aujourd\'hui' : 'Today'
+      label: this.lang() === 'fr-FR' ? "Aujourd'hui" : 'Today',
     },
     {
       value: 'yesterday',
-      label: this.lang() === 'fr-FR' ? 'Hier' : 'Yesterday'
+      label: this.lang() === 'fr-FR' ? 'Hier' : 'Yesterday',
     },
     {
       value: 'week',
-      label: this.lang() === 'fr-FR' ? 'Semaine en cours' : 'Current week'
+      label: this.lang() === 'fr-FR' ? 'Semaine en cours' : 'Current week',
     },
     {
       value: 'month',
-      label: this.lang() === 'fr-FR' ? 'Mois en cours' : 'Current month'
+      label: this.lang() === 'fr-FR' ? 'Mois en cours' : 'Current month',
     },
     {
       value: 'trimester',
-      label: this.lang() === 'fr-FR' ? 'Trimestre en cours' : 'Current trimester'
+      label:
+        this.lang() === 'fr-FR' ? 'Trimestre en cours' : 'Current trimester',
     },
     {
       value: 'year',
-      label: this.lang() === 'fr-FR' ? 'Année en cours' : 'Current year'
-    }
-  ]
+      label: this.lang() === 'fr-FR' ? 'Année en cours' : 'Current year',
+    },
+  ];
 
-  constructor( @Inject(Renderer2) private renderer: Renderer2, private dateService: BibliolibFilterService) {
+  constructor(
+    @Inject(Renderer2) private renderer: Renderer2,
+    private dateService: BibliolibFilterService
+  ) {
     effect(() => {
       if (this.mode() === 'filter' || this.mode() === 'filter-order') {
-        this.addDefaultValueToCheckFilter()
+        this.addDefaultValueToCheckFilter();
       }
     });
   }
@@ -115,73 +161,85 @@ export class BibliolibFilterComponent implements OnInit {
       this.currentOrder = {
         cat: this.orderConfig()[0].cat,
         label: this.orderConfig()[0].label,
-        direction: 'asc'
-      }
+        direction: 'asc',
+      };
     }
 
     if (this.mode() === 'filter' || this.mode() === 'filter-order') {
-
       this.tempSelectedFilter = [...this.activeFilterList()];
 
-      this.startDateControl.valueChanges.subscribe(value => {
+      this.startDateControl.valueChanges.subscribe((value) => {
         if (value) {
           this.endDateControl.setValue(null, { emitEvent: false });
         }
       });
 
-      this.endDateControl.valueChanges.subscribe(value => {
-        if (value &&  this.startDateControl.value) {
+      this.endDateControl.valueChanges.subscribe((value) => {
+        if (value && this.startDateControl.value) {
           this.addDateFilter('custom');
         }
       });
 
-      this.filterSearchCtrl.valueChanges.subscribe(value => {
+      this.filterSearchCtrl.valueChanges.subscribe((value) => {
         if (value !== '') {
-          const _currentCategory = this.filterConfig().find(f => f.cat === this.currentFilter.cat);
+          const normalizedValue = this.removeAccents(value.toLowerCase());
+
+          const _currentCategory = this.filterConfig().find(
+            (f) => f.cat === this.currentFilter.cat
+          );
           if (_currentCategory) {
-            const newValues = _currentCategory.values.filter(v => v.toLowerCase().includes(value.toLowerCase()));
+            const newValues = _currentCategory.values.filter((v) =>
+              this.removeAccents(v.toLowerCase()).includes(normalizedValue)
+            );
             this.currentFilter = { ...this.currentFilter, values: newValues };
           }
         } else {
           // Si la valeur est vide, utilisez les valeurs d'origine de _currentCategory
-          const _currentCategory = this.filterConfig().find(f => f.cat === this.currentFilter.cat);
+          const _currentCategory = this.filterConfig().find(
+            (f) => f.cat === this.currentFilter.cat
+          );
           if (_currentCategory) {
-            this.currentFilter = { ...this.currentFilter, values: _currentCategory.values };
+            this.currentFilter = {
+              ...this.currentFilter,
+              values: _currentCategory.values,
+            };
           }
         }
-
       });
 
-      this.searchCtrl.valueChanges.subscribe(value => {
-        if(value === '') {
+      this.searchCtrl.valueChanges.subscribe((value) => {
+        if (value === '') {
           this.searchChange.emit(value);
         }
       });
 
-      this.rangeMinControl.valueChanges.subscribe(value => {
+      this.rangeMinControl.valueChanges.subscribe((value) => {
         if (value.length > 0) {
           this.addNumericRangeFilter(value, 'min');
         } else {
           this.addNumericRangeFilter('null', 'min');
         }
-      })
+      });
 
-      this.rangeMaxControl.valueChanges.subscribe(value => {
+      this.rangeMaxControl.valueChanges.subscribe((value) => {
         if (value.length > 0) {
           this.addNumericRangeFilter(value, 'max');
         } else {
           this.addNumericRangeFilter('null', 'max');
         }
-      })
+      });
     }
 
     this.isMobileDisplay = document.body.offsetWidth < 1200;
 
     const checkScreenSize = () => document.body.offsetWidth < 1200;
 
-    const screenSizeChanged$ = fromEvent(window, 'resize').pipe(throttleTime(500), map(checkScreenSize));
+    const screenSizeChanged$ = fromEvent(window, 'resize').pipe(
+      throttleTime(500),
+      map(checkScreenSize)
+    );
 
-    screenSizeChanged$.subscribe(isMobile => {
+    screenSizeChanged$.subscribe((isMobile) => {
       if (isMobile) {
         this.isMobileDisplay = true;
       } else {
@@ -190,28 +248,34 @@ export class BibliolibFilterComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.updateCSSVariable();
+  }
+
   addDefaultValueToCheckFilter() {
-    const allCheckFilters = this.filterConfig().filter(f => f.type === 'check').map(c => c.cat);
+    const allCheckFilters = this.filterConfig()
+      .filter((f) => f.type === 'check')
+      .map((c) => c.cat);
     this.tempSelectedFilter = [...this.activeFilterList()];
 
-    allCheckFilters.forEach(cat => {
-      if (!this.tempSelectedFilter.some(f => f.cat === cat)) {
+    allCheckFilters.forEach((cat) => {
+      if (!this.tempSelectedFilter.some((f) => f.cat === cat)) {
         this.tempSelectedFilter.push({
           cat: cat,
-          label: this.filterConfig().find(f => f.cat === cat)?.label || '',
+          label: this.filterConfig().find((f) => f.cat === cat)?.label || '',
           type: 'check',
-          values: ['f']
+          values: ['f'],
         });
       }
-    })
+    });
   }
 
   onOrderChange(label: string, cat: string, direction: 'asc' | 'desc') {
     this.currentOrder = {
       label: label,
       cat: cat,
-      direction: direction
-    }
+      direction: direction,
+    };
 
     this.filterModalState = 'nav-menu';
     this.orderChange.emit(this.currentOrder);
@@ -228,10 +292,18 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
   removeFilterItem(value: string, label: string, type: string) {
-    const filterIndex = this.tempSelectedFilter.findIndex(f => f.label === label);
+    const filterIndex = this.tempSelectedFilter.findIndex(
+      (f) => f.label === label
+    );
     if (type === 'check') {
-      this.tempSelectedFilter[filterIndex] = { ...this.tempSelectedFilter[filterIndex], values: ['f'] };
-    } else if (this.tempSelectedFilter[filterIndex] && this.tempSelectedFilter[filterIndex].values.length === 1) {
+      this.tempSelectedFilter[filterIndex] = {
+        ...this.tempSelectedFilter[filterIndex],
+        values: ['f'],
+      };
+    } else if (
+      this.tempSelectedFilter[filterIndex] &&
+      this.tempSelectedFilter[filterIndex].values.length === 1
+    ) {
       this.removeFilter(filterIndex);
     } else {
       this.removeValueFromExistingFilter(filterIndex, value);
@@ -265,9 +337,17 @@ export class BibliolibFilterComponent implements OnInit {
   getFormattedFilterValue(filterType: string, value: string): string {
     switch (filterType) {
       case 'date':
-        return value.split('|')[0].split(' ')[0] + ' - ' + value.split('|')[1].split(' ')[0];
+        return (
+          value.split('|')[0].split(' ')[0] +
+          ' - ' +
+          value.split('|')[1].split(' ')[0]
+        );
       case 'numeric_range':
-        return (value.split('|')[0] != 'null' ? value.split('|')[0] : '0') + ' - ' + (value.split('|')[1] != 'null' ? value.split('|')[1] : '∞');
+        return (
+          (value.split('|')[0] != 'null' ? value.split('|')[0] : '0') +
+          ' - ' +
+          (value.split('|')[1] != 'null' ? value.split('|')[1] : '∞')
+        );
       default:
         return value;
     }
@@ -279,6 +359,7 @@ export class BibliolibFilterComponent implements OnInit {
    */
   toggleMenu(e: Event) {
     e.stopPropagation();
+    this.updateCSSVariable();
     this.filterModalState = 'nav-menu';
     this.onStateChange();
   }
@@ -297,7 +378,9 @@ export class BibliolibFilterComponent implements OnInit {
    * Permet de bloquer le scroll de la page lorsque le menu de filtre/tri est ouvert
    */
   onStateChange() {
-    this.filterModalState !== 'hidden' ? this.renderer.setStyle(document.body, 'overflow', 'hidden') : this.renderer.setStyle(document.body, 'overflow', 'auto');
+    this.filterModalState !== 'hidden'
+      ? this.renderer.setStyle(document.body, 'overflow', 'hidden')
+      : this.renderer.setStyle(document.body, 'overflow', 'auto');
   }
 
   /**
@@ -320,9 +403,13 @@ export class BibliolibFilterComponent implements OnInit {
     e.stopPropagation();
     switch (filter.type) {
       case 'check':
-        this.tempSelectedFilter = this.tempSelectedFilter.map(f => {
+        this.tempSelectedFilter = this.tempSelectedFilter.map((f) => {
           if (f.cat === filter.cat) {
-            return { ...f, values: f.values[0] === 't' ? f.values = ['f'] : f.values = ['t'] };
+            return {
+              ...f,
+              values:
+                f.values[0] === 't' ? (f.values = ['f']) : (f.values = ['t']),
+            };
           } else {
             return f;
           }
@@ -332,6 +419,7 @@ export class BibliolibFilterComponent implements OnInit {
       default:
         this.filterModalState = 'filter-menu';
         this.currentFilter = filter;
+        setTimeout(() => this.updateCSSVariable(), 100);
         break;
     }
   }
@@ -343,18 +431,29 @@ export class BibliolibFilterComponent implements OnInit {
    */
   isCategoryActive(cat: string, type: string): boolean {
     if (type === 'check') {
-      return this.tempSelectedFilter.some(filter => filter.cat === cat && filter.values[0] === 't');
+      return this.tempSelectedFilter.some(
+        (filter) => filter.cat === cat && filter.values[0] === 't'
+      );
     } else {
-      return this.activeFilterList().some(filter => filter.cat === cat);
+      return this.activeFilterList().some((filter) => filter.cat === cat);
     }
   }
 
   /**
- * Permet de savoir si la valeur du filtre est active
- * @param {string} cat catégorie du filtre
- */
+   * Permet de savoir si la valeur du filtre est active
+   * @param {string} cat catégorie du filtre
+   */
   isValueActive(value: string): boolean {
-    return this.activeFilterList().some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value)) || this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
+    return (
+      this.activeFilterList().some(
+        (filter) =>
+          filter.cat === this.currentFilter.cat && filter.values.includes(value)
+      ) ||
+      this.tempSelectedFilter.some(
+        (filter) =>
+          filter.cat === this.currentFilter.cat && filter.values.includes(value)
+      )
+    );
   }
 
   /**
@@ -362,7 +461,9 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {string} value valeur du filtre
    */
   handleAddFilterValue(value: string) {
-    const filterExists = this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat);
+    const filterExists = this.tempSelectedFilter.some(
+      (filter) => filter.cat === this.currentFilter.cat
+    );
     if (filterExists) {
       this.updateExistingFilter(value);
     } else {
@@ -375,16 +476,20 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {string} value valeur du filtre
    */
   private updateExistingFilter(value: string) {
-    const catIndex = this.tempSelectedFilter.findIndex(filter => filter.cat === this.currentFilter.cat);
+    const catIndex = this.tempSelectedFilter.findIndex(
+      (filter) => filter.cat === this.currentFilter.cat
+    );
 
     if (this.isValueActive(value)) {
       this.removeValueFromExistingFilter(catIndex, value);
-
     } else {
       this.addValueToExistingFilter(catIndex, value);
     }
 
-    if (catIndex !== -1 && this.tempSelectedFilter[catIndex].values.length === 0) {
+    if (
+      catIndex !== -1 &&
+      this.tempSelectedFilter[catIndex].values.length === 0
+    ) {
       this.removeFilter(catIndex);
     }
   }
@@ -395,14 +500,17 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {string} value valeur du filtre
    */
   private removeValueFromExistingFilter(catIndex: number, value: string) {
-    if(!this.tempSelectedFilter[catIndex]) {
+    if (!this.tempSelectedFilter[catIndex]) {
       this.filterChange.emit(this.tempSelectedFilter);
     }
     const values = this.tempSelectedFilter[catIndex].values;
     const valueIndex = values.indexOf(value);
 
     if (valueIndex !== -1) {
-      this.tempSelectedFilter[catIndex] = { ...this.tempSelectedFilter[catIndex], values: values.filter(v => v !== value) };
+      this.tempSelectedFilter[catIndex] = {
+        ...this.tempSelectedFilter[catIndex],
+        values: values.filter((v) => v !== value),
+      };
     }
     this.filterChange.emit(this.tempSelectedFilter);
   }
@@ -416,7 +524,10 @@ export class BibliolibFilterComponent implements OnInit {
     const existingFilter = this.tempSelectedFilter[catIndex];
 
     if (existingFilter) {
-      this.tempSelectedFilter[catIndex] = { ...existingFilter, values: [...existingFilter.values, value] };
+      this.tempSelectedFilter[catIndex] = {
+        ...existingFilter,
+        values: [...existingFilter.values, value],
+      };
     }
   }
 
@@ -425,10 +536,11 @@ export class BibliolibFilterComponent implements OnInit {
    * @param {number} catIndex index de la catégorie dans le tableau de filtre
    */
   private removeFilter(catIndex: number) {
-    this.tempSelectedFilter = [...this.tempSelectedFilter.filter((filter, index) => index !== catIndex)];
+    this.tempSelectedFilter = [
+      ...this.tempSelectedFilter.filter((filter, index) => index !== catIndex),
+    ];
     this.filterChange.emit(this.tempSelectedFilter);
   }
-
 
   /**
    * Permet de rajouter une catégorie de filtre au tableau de filtre actif
@@ -439,14 +551,14 @@ export class BibliolibFilterComponent implements OnInit {
       cat: this.currentFilter.cat,
       label: this.currentFilter.label,
       type: this.currentFilter.type,
-      values: [value]
+      values: [value],
     });
   }
 
   emitFilterChange() {
     this.filterChange.emit(this.tempSelectedFilter);
-    this.startDateControl.setValue(null, {emitEvent: false});
-    this.endDateControl.setValue(null, {emitEvent: false});
+    this.startDateControl.setValue(null, { emitEvent: false });
+    this.endDateControl.setValue(null, { emitEvent: false });
   }
 
   /**
@@ -458,25 +570,105 @@ export class BibliolibFilterComponent implements OnInit {
     switch (value) {
       case 'today':
         const today = new Date();
-        const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-        const endToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 0);
+        const startToday = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          0,
+          0,
+          0,
+          0
+        );
+        const endToday = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          23,
+          59,
+          59,
+          0
+        );
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         // Utilisez toLocaleString avec l'option timeZone
-        const startTodayLocal = startToday.toLocaleString(undefined, { timeZone });
+        const startTodayLocal = startToday.toLocaleString(undefined, {
+          timeZone,
+        });
         const endTodayLocal = endToday.toLocaleString(undefined, { timeZone });
 
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(startTodayLocal + '|' +  endTodayLocal) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(startTodayLocal + '|' + endTodayLocal)
+          ? true
+          : false;
       case 'yesterday':
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartYesterdayDate() + '|' + this.dateService.getEndYesterdayDate()) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(
+            this.dateService.getStartYesterdayDate() +
+              '|' +
+              this.dateService.getEndYesterdayDate()
+          )
+          ? true
+          : false;
       case 'week':
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartWeekDate() + '|' + this.dateService.getEndWeekDate()) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(
+            this.dateService.getStartWeekDate() +
+              '|' +
+              this.dateService.getEndWeekDate()
+          )
+          ? true
+          : false;
       case 'month':
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartMonthDate() + '|' + this.dateService.getEndMonthDate()) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(
+            this.dateService.getStartMonthDate() +
+              '|' +
+              this.dateService.getEndMonthDate()
+          )
+          ? true
+          : false;
       case 'trimester':
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartTrimesterDate() + '|' + this.dateService.getEndTrimesterDate()) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(
+            this.dateService.getStartTrimesterDate() +
+              '|' +
+              this.dateService.getEndTrimesterDate()
+          )
+          ? true
+          : false;
       case 'year':
-        return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === this.currentFilter.label)?.values.includes(this.dateService.getStartYearDate() + '|' + this.dateService.getEndYearDate()) ? true : false;
+        return this.tempSelectedFilter
+          .find(
+            (item) =>
+              item.type === 'date' && item.label === this.currentFilter.label
+          )
+          ?.values.includes(
+            this.dateService.getStartYearDate() +
+              '|' +
+              this.dateService.getEndYearDate()
+          )
+          ? true
+          : false;
       default:
         return false;
     }
@@ -488,7 +680,11 @@ export class BibliolibFilterComponent implements OnInit {
    * @returns {boolean} Retourne true si le filtre de date est actuellement sélectionné, sinon false
    */
   checkCurrentDateFilter(label: string): boolean {
-    return this.tempSelectedFilter.find(item => item.type === 'date' && item.label === label) ? true : false;
+    return this.tempSelectedFilter.find(
+      (item) => item.type === 'date' && item.label === label
+    )
+      ? true
+      : false;
   }
 
   /**
@@ -510,27 +706,71 @@ export class BibliolibFilterComponent implements OnInit {
       const [startFunc, endFunc] = dateServiceFunctions[value];
 
       if (!this.checkCurrentDateFilter(this.currentFilter.label)) {
-        this.createNewFilter(dateService[startFunc]() + '|' + dateService[endFunc]());
+        this.createNewFilter(
+          dateService[startFunc]() + '|' + dateService[endFunc]()
+        );
       } else {
-        const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
-        this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [dateService[startFunc]() + '|' + dateService[endFunc]()] };
+        const indexToReplace = this.tempSelectedFilter.findIndex(
+          (item) => item.label === this.currentFilter.label
+        );
+        this.tempSelectedFilter[indexToReplace] = {
+          ...this.tempSelectedFilter[indexToReplace],
+          values: [dateService[startFunc]() + '|' + dateService[endFunc]()],
+        };
       }
     } else {
       if (!this.checkCurrentDateFilter(this.currentFilter.label)) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const startDate = new Date(this.startDateControl.value.getFullYear(), this.startDateControl.value.getMonth(), this.startDateControl.value.getDate(), 0, 0, 0, 0);
-        const endDate = new Date(this.endDateControl.value.getFullYear(), this.endDateControl.value.getMonth(), this.endDateControl.value.getDate(), 23, 59, 59, 0);
+        const startDate = new Date(
+          this.startDateControl.value.getFullYear(),
+          this.startDateControl.value.getMonth(),
+          this.startDateControl.value.getDate(),
+          0,
+          0,
+          0,
+          0
+        );
+        const endDate = new Date(
+          this.endDateControl.value.getFullYear(),
+          this.endDateControl.value.getMonth(),
+          this.endDateControl.value.getDate(),
+          23,
+          59,
+          59,
+          0
+        );
         const start = startDate.toLocaleString(undefined, { timeZone });
         const end = endDate.toLocaleString(undefined, { timeZone });
         this.createNewFilter(start + '|' + end);
       } else {
-        const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
+        const indexToReplace = this.tempSelectedFilter.findIndex(
+          (item) => item.label === this.currentFilter.label
+        );
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const startDate = new Date(this.startDateControl.value.getFullYear(), this.startDateControl.value.getMonth(), this.startDateControl.value.getDate(), 0, 0, 0, 0);
-        const endDate = new Date(this.endDateControl.value.getFullYear(), this.endDateControl.value.getMonth(), this.endDateControl.value.getDate(), 23, 59, 59, 0);
+        const startDate = new Date(
+          this.startDateControl.value.getFullYear(),
+          this.startDateControl.value.getMonth(),
+          this.startDateControl.value.getDate(),
+          0,
+          0,
+          0,
+          0
+        );
+        const endDate = new Date(
+          this.endDateControl.value.getFullYear(),
+          this.endDateControl.value.getMonth(),
+          this.endDateControl.value.getDate(),
+          23,
+          59,
+          59,
+          0
+        );
         const start = startDate.toLocaleString(undefined, { timeZone });
         const end = endDate.toLocaleString(undefined, { timeZone });
-        this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [start + '|' + end] };
+        this.tempSelectedFilter[indexToReplace] = {
+          ...this.tempSelectedFilter[indexToReplace],
+          values: [start + '|' + end],
+        };
       }
     }
   }
@@ -543,13 +783,21 @@ export class BibliolibFilterComponent implements OnInit {
     if (!this.checkIfFilterIsInTemp()) {
       this.createNewFilter(value);
     } else {
-      const indexToReplace = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
-      this.tempSelectedFilter[indexToReplace] = { ...this.tempSelectedFilter[indexToReplace], values: [value] };
+      const indexToReplace = this.tempSelectedFilter.findIndex(
+        (item) => item.label === this.currentFilter.label
+      );
+      this.tempSelectedFilter[indexToReplace] = {
+        ...this.tempSelectedFilter[indexToReplace],
+        values: [value],
+      };
     }
   }
 
   isValueNullOrNotActive(value: string): boolean {
-    return this.tempSelectedFilter.some(filter => filter.cat === this.currentFilter.cat && filter.values.includes(value));
+    return this.tempSelectedFilter.some(
+      (filter) =>
+        filter.cat === this.currentFilter.cat && filter.values.includes(value)
+    );
   }
 
   setCurrentFilter(value: FilterConfig.FullFilterItemConfig) {
@@ -557,52 +805,58 @@ export class BibliolibFilterComponent implements OnInit {
   }
 
   emitOnChangeNumericRange() {
-    if (this.rangeMinControl.value !== '' && this.rangeMaxControl.value !== '') {
+    if (
+      this.rangeMinControl.value !== '' &&
+      this.rangeMaxControl.value !== ''
+    ) {
       this.emitFilterChange();
     }
   }
 
   checkIfFilterIsInTemp() {
-    return this.tempSelectedFilter.find(item => item.cat === this.currentFilter.cat);
+    return this.tempSelectedFilter.find(
+      (item) => item.cat === this.currentFilter.cat
+    );
   }
 
   addNumericRangeFilter(value: string, input: 'min' | 'max') {
     if (this.checkIfFilterIsInTemp()) {
-      const categoryIndex = this.tempSelectedFilter.findIndex(item => item.label === this.currentFilter.label);
+      const categoryIndex = this.tempSelectedFilter.findIndex(
+        (item) => item.label === this.currentFilter.label
+      );
       switch (input) {
         case 'min':
-          const max = this.tempSelectedFilter[categoryIndex].values[0].split('|')[1];
-          this.tempSelectedFilter[categoryIndex] = max != 'null'
-            ?
-            {
-              ...this.tempSelectedFilter[categoryIndex],
-              values: [value + '|' + max]
-            }
-            :
-            {
-              ...this.tempSelectedFilter[categoryIndex],
-              values: [value + '|null']
-            };
+          const max =
+            this.tempSelectedFilter[categoryIndex].values[0].split('|')[1];
+          this.tempSelectedFilter[categoryIndex] =
+            max != 'null'
+              ? {
+                  ...this.tempSelectedFilter[categoryIndex],
+                  values: [value + '|' + max],
+                }
+              : {
+                  ...this.tempSelectedFilter[categoryIndex],
+                  values: [value + '|null'],
+                };
           break;
         case 'max':
-          const min = this.tempSelectedFilter[categoryIndex].values[0].split('|')[0];
-          this.tempSelectedFilter[categoryIndex] = min != 'null'
-            ?
-            {
-              ...this.tempSelectedFilter[categoryIndex],
-              values: [min + '|' + value]
-            }
-            :
-            {
-              ...this.tempSelectedFilter[categoryIndex],
-              values: ['null|' + value]
-            };
+          const min =
+            this.tempSelectedFilter[categoryIndex].values[0].split('|')[0];
+          this.tempSelectedFilter[categoryIndex] =
+            min != 'null'
+              ? {
+                  ...this.tempSelectedFilter[categoryIndex],
+                  values: [min + '|' + value],
+                }
+              : {
+                  ...this.tempSelectedFilter[categoryIndex],
+                  values: ['null|' + value],
+                };
           break;
         default:
           break;
       }
-    }
-    else {
+    } else {
       switch (input) {
         case 'min':
           this.createNewFilter(value + '|null');
@@ -621,7 +875,7 @@ export class BibliolibFilterComponent implements OnInit {
       const max = filter.values[0].split('|')[1];
       const min = filter.values[0].split('|')[0];
       if (max !== 'null' && min !== 'null') {
-        if (+max > +min) {
+        if (+max >= +min) {
           this.filterChange.emit(this.tempSelectedFilter);
         }
       }
@@ -630,5 +884,95 @@ export class BibliolibFilterComponent implements OnInit {
 
   onSearchChange() {
     this.searchChange.emit(this.searchCtrl.value);
+  }
+
+  private updateCSSVariable(): void {
+    const header = document.querySelector('.menu__header') as HTMLElement;
+    const footer = document.querySelector('.btn-emit-filter') as HTMLElement;
+
+    let headerHeight = header?.offsetHeight || 0;
+    let footerHeight = footer?.offsetHeight || 0;
+
+    // Ajoute les paddings
+    headerHeight +=
+      this.getElementPadding(header).top +
+      this.getElementPadding(header).bottom;
+    footerHeight +=
+      this.getElementPadding(footer).top +
+      this.getElementPadding(footer).bottom;
+
+    // Ajoute les autres éléments conditionnels
+    if (this.mode() != 'order' && this.tempSelectedFilter.length > 0) {
+      const reinitBtn = document.querySelector(
+        '.btn-reset-filter'
+      ) as HTMLElement;
+      headerHeight +=
+        (reinitBtn?.offsetHeight || 0) +
+        this.getElementPadding(reinitBtn).top +
+        this.getElementPadding(reinitBtn).bottom;
+
+      if (this.currentFilter?.type === 'list') {
+        const searchInput = document.querySelector(
+          '.search-filter'
+        ) as HTMLElement;
+        headerHeight +=
+          (searchInput?.offsetHeight || 0) +
+          this.getElementPadding(searchInput).top +
+          this.getElementPadding(searchInput).bottom;
+      }
+
+      if (this.isMobileDisplay) {
+        const currentFilter = document.querySelector(
+          '.active-filter-list--mobile'
+        ) as HTMLElement;
+        headerHeight +=
+          (currentFilter?.offsetHeight || 0) +
+          this.getElementPadding(currentFilter).top +
+          this.getElementPadding(currentFilter).bottom;
+      }
+    }
+
+    if (this.mode() != 'filter') {
+      const orderBtn = document.querySelector('.order-btn') as HTMLElement;
+      headerHeight +=
+        (orderBtn?.offsetHeight || 0) +
+        this.getElementPadding(orderBtn).top +
+        this.getElementPadding(orderBtn).bottom;
+    }
+
+    // Calculer la hauteur disponible
+    const availableHeight = window.innerHeight - headerHeight - footerHeight;
+
+    // Mettre à jour la variable CSS
+    document.documentElement.style.setProperty(
+      '--available-height',
+      `${availableHeight}px`
+    );
+  }
+
+  private getElementPadding(element: HTMLElement): {
+    top: number;
+    bottom: number;
+  } {
+    if (!element) return { top: 0, bottom: 0 };
+
+    const computedStyle = window.getComputedStyle(element);
+    const paddingTop = parseInt(computedStyle.paddingTop, 10) || 0;
+    const paddingBottom = parseInt(computedStyle.paddingBottom, 10) || 0;
+
+    return { top: paddingTop, bottom: paddingBottom };
+  }
+
+  checkActiveFilterList() {
+    return (
+      this.activeFilterList().length > 0 &&
+      this.activeFilterList().some(
+        (f) => !(f.type === 'check' && f.values[0] === 'f')
+      )
+    );
+  }
+
+  removeAccents(str: string) {
+    return str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
   }
 }
