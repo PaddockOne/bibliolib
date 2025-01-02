@@ -95,6 +95,12 @@ export class AppComponent {
       values: [],
     },
     {
+      label: 'Prix 2',
+      cat: 'price_2',
+      type: 'numeric_range',
+      values: [],
+    },
+    {
       label: 'Commentaire',
       cat: 'comment',
       type: 'nullOrNot',
