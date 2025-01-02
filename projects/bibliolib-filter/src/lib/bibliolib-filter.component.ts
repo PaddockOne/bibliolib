@@ -979,8 +979,8 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
       if (!this.rangeControls[item.cat]) {
         // Si le contrôle n'existe pas, crée-le avec des valeurs par défaut
         this.rangeControls[item.cat] = new FormGroup({
-          min: new FormControl('', { nonNullable: true }), // Valeur par défaut si absente
-          max: new FormControl('', { nonNullable: true }), // Valeur par défaut si absente
+          min: new FormControl('', { nonNullable: true, updateOn: 'blur' }), // Valeur par défaut si absente
+          max: new FormControl('', { nonNullable: true, updateOn: 'blur' }), // Valeur par défaut si absente
         });
         this.attachValueChangeSubscriptions(item.cat);
       } else {
