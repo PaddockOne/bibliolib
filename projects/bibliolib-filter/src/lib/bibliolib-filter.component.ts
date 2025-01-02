@@ -1,11 +1,9 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
   HostListener,
   Inject,
   OnInit,
-  Output,
   OutputEmitterRef,
   Renderer2,
   computed,
@@ -13,7 +11,12 @@ import {
   input,
   output,
 } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { fromEvent, map, throttleTime } from 'rxjs';
 import { FilterConfig } from './filter-config.model';
 import { BibliolibFilterService } from './bibliolib-filter.service';
@@ -99,14 +102,12 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
   startDateControl: FormControl = new FormControl();
   endDateControl: FormControl = new FormControl();
 
-  rangeMinControl: FormControl = new FormControl('', {
-    nonNullable: true,
-    updateOn: 'blur',
-  });
-  rangeMaxControl: FormControl = new FormControl('', {
-    nonNullable: true,
-    updateOn: 'blur',
-  });
+  rangeControls: {
+    [key: string]: FormGroup<{
+      min: FormControl<string>;
+      max: FormControl<string>;
+    }>;
+  } = {};
 
   filterConfigWithoutRangeItems = computed(() =>
     this.filterConfig().filter((f) => f.type !== 'numeric_range')
@@ -152,6 +153,7 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
     effect(() => {
       if (this.mode() === 'filter' || this.mode() === 'filter-order') {
         this.addDefaultValueToCheckFilter();
+        this.updateFormControls();
       }
     });
   }
@@ -210,22 +212,6 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
       this.searchCtrl.valueChanges.subscribe((value) => {
         if (value === '') {
           this.searchChange.emit(value);
-        }
-      });
-
-      this.rangeMinControl.valueChanges.subscribe((value) => {
-        if (value.length > 0) {
-          this.addNumericRangeFilter(value, 'min');
-        } else {
-          this.addNumericRangeFilter('null', 'min');
-        }
-      });
-
-      this.rangeMaxControl.valueChanges.subscribe((value) => {
-        if (value.length > 0) {
-          this.addNumericRangeFilter(value, 'max');
-        } else {
-          this.addNumericRangeFilter('null', 'max');
         }
       });
     }
@@ -536,6 +522,15 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
    * @param {number} catIndex index de la catégorie dans le tableau de filtre
    */
   private removeFilter(catIndex: number) {
+    const filterToRemove = this.tempSelectedFilter[catIndex];
+    if (filterToRemove.type === 'numeric_range') {
+      this.rangeControls[filterToRemove.cat].controls.min.setValue('', {
+        emitEvent: false,
+      });
+      this.rangeControls[filterToRemove.cat].controls.max.setValue('', {
+        emitEvent: false,
+      });
+    }
     this.tempSelectedFilter = [
       ...this.tempSelectedFilter.filter((filter, index) => index !== catIndex),
     ];
@@ -806,8 +801,8 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
 
   emitOnChangeNumericRange() {
     if (
-      this.rangeMinControl.value !== '' &&
-      this.rangeMaxControl.value !== ''
+      this.rangeControls[this.currentFilter.cat].controls.min.value !== '' &&
+      this.rangeControls[this.currentFilter.cat].controls.max.value !== ''
     ) {
       this.emitFilterChange();
     }
@@ -974,5 +969,65 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
 
   removeAccents(str: string) {
     return str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  }
+
+  updateFormControls() {
+    const items = this.filterConfigWithRangeItems();
+
+    // Parcourir les éléments pour mettre à jour ou ajouter des contrôles
+    items.forEach((item) => {
+      if (!this.rangeControls[item.cat]) {
+        // Si le contrôle n'existe pas, crée-le avec des valeurs par défaut
+        this.rangeControls[item.cat] = new FormGroup({
+          min: new FormControl('', { nonNullable: true }), // Valeur par défaut si absente
+          max: new FormControl('', { nonNullable: true }), // Valeur par défaut si absente
+        });
+        this.attachValueChangeSubscriptions(item.cat);
+      } else {
+        // Si le contrôle existe, mets à jour ses valeurs
+        const existingControl = this.rangeControls[item.cat];
+        existingControl
+          .get('min')
+          ?.setValue(existingControl.get('min')?.value || '', {
+            emitEvent: false,
+          });
+        existingControl
+          .get('max')
+          ?.setValue(existingControl.get('max')?.value || '', {
+            emitEvent: false,
+          });
+      }
+    });
+
+    // Supprimer les contrôles qui ne sont plus dans la configuration
+    Object.keys(this.rangeControls).forEach((cat) => {
+      if (!items.find((item) => item.cat === cat)) {
+        delete this.rangeControls[cat];
+      }
+    });
+  }
+
+  attachValueChangeSubscriptions(cat: string) {
+    const control = this.rangeControls[cat];
+
+    control.get('min')?.valueChanges.subscribe((value) => {
+      if (value.length > 0) {
+        this.addNumericRangeFilter(value, 'min');
+      } else {
+        this.addNumericRangeFilter('null', 'min');
+      }
+    });
+
+    control.get('max')?.valueChanges.subscribe((value) => {
+      if (value.length > 0) {
+        this.addNumericRangeFilter(value, 'max');
+      } else {
+        this.addNumericRangeFilter('null', 'max');
+      }
+    });
+  }
+
+  getFormControl(cat: string, type: 'min' | 'max'): FormControl {
+    return this.rangeControls[cat]?.get(type) as FormControl;
   }
 }

@@ -328,7 +328,7 @@
           <p class="text--md text--regular primary-500">{{ item.label }}</p>
           <section class="input-container">
             <input
-              [formControl]="rangeMinControl"
+              [formControl]="getFormControl(item.cat, 'min')"
               type="text"
               appOnlyNumbers
               class="input--text"
@@ -336,7 +336,7 @@
               (focus)="setCurrentFilter(item)"
             />
             <input
-              [formControl]="rangeMaxControl"
+              [formControl]="getFormControl(item.cat, 'max')"
               type="text"
               appOnlyNumbers
               class="input--text"
