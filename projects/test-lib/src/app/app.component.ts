@@ -1,6 +1,6 @@
-import { Component, WritableSignal, signal } from '@angular/core';
+import { Component, WritableSignal, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import {
   BibliolibDatetimePickerComponent,
   DateTime,
@@ -150,11 +150,15 @@ export class AppComponent {
 
   constructor() {}
 
+  private router = inject(Router);
   onOrderChange(event: any) {}
 
   onFilterChange(event: FilterConfig.FullFilterItemConfig[]) {
     console.log(event);
     this.activeFilterList = [...event];
+    this.router.navigate([], {
+      queryParams: { sortie: event.find((e) => e.cat === 'sortie')?.values },
+    });
   }
 
   onSearchChange(event: any) {
