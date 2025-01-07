@@ -393,8 +393,7 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
           if (f.cat === filter.cat) {
             return {
               ...f,
-              values:
-                f.values[0] === 't' ? (f.values = ['f']) : (f.values = ['t']),
+              values: f.values[0] === 't' ? ['f'] : ['t'],
             };
           } else {
             return f;
