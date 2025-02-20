@@ -394,28 +394,12 @@
           <p class="text--md text--regular primary-500">{{ date.label }}</p>
         </span>
         }
-        <mat-form-field style="width: calc(100% - 0.5em)" class="dont-hide">
-          <mat-label>Période personalisée</mat-label>
-          <mat-date-range-input
-            (click)="date.open()"
-            [rangePicker]="date"
-            class="dont-hide"
-          >
-            <input matStartDate [formControl]="startDateControl" />
-            <input matEndDate [formControl]="endDateControl" />
-          </mat-date-range-input>
-          <mat-datepicker-toggle
-            class="picker dont-hide"
-            matSuffix
-            [for]="date"
-          >
-          </mat-datepicker-toggle>
-          <mat-date-range-picker
-            touchUi
-            #date
-            class="dont-hide"
-          ></mat-date-range-picker>
-        </mat-form-field>
+        <section class="custom-date">
+          <tui-input-date-range [formControl]="customDateCtrl">
+            Période personalisée
+            <input placeholder="de - à" tuiTextfieldLegacy />
+          </tui-input-date-range>
+        </section>
       </section>
       }
     </section>

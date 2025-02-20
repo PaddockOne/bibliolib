@@ -22,10 +22,9 @@ import { FilterConfig } from './filter-config.model';
 import { BibliolibFilterService } from './bibliolib-filter.service';
 import { getAnimations } from './animations';
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
 import { OnlyNumbersDirective } from './only-numbers.directive';
+import { TuiDayRange } from '@taiga-ui/cdk';
+import { TuiInputDateRangeModule } from '@taiga-ui/legacy';
 
 @Component({
   selector: 'bibliolib-filter',
@@ -33,12 +32,10 @@ import { OnlyNumbersDirective } from './only-numbers.directive';
   styleUrls: ['./bibliolib-filter.component.scss'],
   standalone: true,
   imports: [
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    TuiInputDateRangeModule,
   ],
   providers: [TitleCasePipe, OnlyNumbersDirective],
   animations: getAnimations(),
@@ -71,14 +68,20 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('document:click', ['$event']) clickout(event: Event) {
+    event.stopPropagation();
     const targettedElement = event.target as HTMLElement;
-
     if (
       this.filterModalState !== 'hidden' &&
       !this.isChildOfMenu(event, '.menu') &&
-      !this.isChildOfMenu(event, '.mat-datepicker-content')
+      !this.isChildOfMenu(event, '.t-scroll') &&
+      !this.isChildOfMenu(event, 'tui-input-date-range') &&
+      !this.isChildOfMenu(event, 'tui-calendar-range')
     ) {
-      if (!targettedElement.classList.contains('dont-hide')) {
+      if (
+        !targettedElement.classList.contains('dont-hide') &&
+        !(targettedElement.id == 'year-btn') &&
+        !targettedElement.classList.contains('t-cell')
+      ) {
         this.filterModalState = 'hidden';
         this.onStateChange();
       }
@@ -99,8 +102,9 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
     nonNullable: true,
   });
 
-  startDateControl: FormControl = new FormControl();
-  endDateControl: FormControl = new FormControl();
+  customDateCtrl = new FormControl<TuiDayRange | null>(null, {
+    nonNullable: true,
+  });
 
   rangeControls: {
     [key: string]: FormGroup<{
@@ -170,16 +174,8 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
     if (this.mode() === 'filter' || this.mode() === 'filter-order') {
       this.tempSelectedFilter = [...this.activeFilterList()];
 
-      this.startDateControl.valueChanges.subscribe((value) => {
-        if (value) {
-          this.endDateControl.setValue(null, { emitEvent: false });
-        }
-      });
-
-      this.endDateControl.valueChanges.subscribe((value) => {
-        if (value && this.startDateControl.value) {
-          this.addDateFilter('custom');
-        }
+      this.customDateCtrl.valueChanges.subscribe((value) => {
+        this.addDateFilter('custom');
       });
 
       this.filterSearchCtrl.valueChanges.subscribe((value) => {
@@ -376,8 +372,17 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
    * @returns {boolean} true si l'élément cliqué est dans le menu de filtre/tri
    */
   isChildOfMenu(event: Event, className: string): boolean {
-    const elements = document.querySelector(className);
-    return elements != null && elements.contains(event.target as Node);
+    // Utilisez querySelectorAll pour obtenir tous les éléments correspondants
+    const elements = document.querySelectorAll(className);
+
+    // Convertissez NodeList en tableau pour l'itérer
+    const elementsArray = Array.from(elements);
+    for (let element of elementsArray) {
+      if (element.contains(event.target as Node)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -551,8 +556,7 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
 
   emitFilterChange() {
     this.filterChange.emit(this.tempSelectedFilter);
-    this.startDateControl.setValue(null, { emitEvent: false });
-    this.endDateControl.setValue(null, { emitEvent: false });
+    this.customDateCtrl.setValue(null, { emitEvent: false });
   }
 
   /**
@@ -716,18 +720,18 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
       if (!this.checkCurrentDateFilter(this.currentFilter.label)) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const startDate = new Date(
-          this.startDateControl.value.getFullYear(),
-          this.startDateControl.value.getMonth(),
-          this.startDateControl.value.getDate(),
+          this.customDateCtrl.value!.from.year,
+          this.customDateCtrl.value!.from.month,
+          this.customDateCtrl.value!.from.day,
           0,
           0,
           0,
           0
         );
         const endDate = new Date(
-          this.endDateControl.value.getFullYear(),
-          this.endDateControl.value.getMonth(),
-          this.endDateControl.value.getDate(),
+          this.customDateCtrl.value!.to.year,
+          this.customDateCtrl.value!.to.month,
+          this.customDateCtrl.value!.to.day,
           23,
           59,
           59,
@@ -742,18 +746,18 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
         );
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const startDate = new Date(
-          this.startDateControl.value.getFullYear(),
-          this.startDateControl.value.getMonth(),
-          this.startDateControl.value.getDate(),
+          this.customDateCtrl.value!.from.year,
+          this.customDateCtrl.value!.from.month,
+          this.customDateCtrl.value!.from.day,
           0,
           0,
           0,
           0
         );
         const endDate = new Date(
-          this.endDateControl.value.getFullYear(),
-          this.endDateControl.value.getMonth(),
-          this.endDateControl.value.getDate(),
+          this.customDateCtrl.value!.to.year,
+          this.customDateCtrl.value!.to.month,
+          this.customDateCtrl.value!.from.day,
           23,
           59,
           59,
