@@ -402,7 +402,14 @@ $gray-900: rgba(18, 25, 38, 1);
     }
   }
 }
-
+.custom-date {
+  width: 100%;
+  padding: 1em 0;
+  @include Flex($justify: stretch, $align: center, $wrap: nowrap);
+  tui-input-date-range {
+    width: 100%;
+  }
+}
 .nav-menu {
   position: fixed;
   top: 0;

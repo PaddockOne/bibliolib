@@ -7,7 +7,7 @@ import {
 } from 'bibliolib-datetime-picker';
 import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
 import { BibliolibGalleryComponent } from 'bibliolib-gallery';
-
+import { TuiRoot } from '@taiga-ui/core';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,6 +17,7 @@ import { BibliolibGalleryComponent } from 'bibliolib-gallery';
     BibliolibDatetimePickerComponent,
     BibliolibFilterComponent,
     BibliolibGalleryComponent,
+    TuiRoot,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

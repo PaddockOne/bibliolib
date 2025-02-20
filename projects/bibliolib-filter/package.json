@@ -1,6 +1,6 @@
 {
   "name": "bibliolib-filter",
-  "version": "1.0.11",
+  "version": "1.1.01",
   "description": "Bibliolib filter",
   "license": "MIT",
   "authors": [
@@ -19,17 +19,19 @@
     "angular",
     "filter",
     "bibliolib",
-    "material"
+    "taiga-ui"
   ],
   "peerDependencies": {
     "@angular/common": ">=19.0.0",
     "@angular/core": ">=19.0.0",
-    "@angular/material": ">=19.0.0",
     "@angular/cdk": ">=19.0.0",
     "@angular/animations": ">=19.0.0",
     "@angular/forms": ">=19.0.0",
     "@angular/platform-browser": ">=19.0.0",
     "@angular/platform-browser-dynamic": ">=19.0.0",
+    "@taiga-ui/cdk": ">=4.0.0",
+    "@taiga-ui/core": ">=4.0.0",
+    "@taiga-ui/legacy": ">=4.0.0",
     "rxjs": "~7.8.0"
   },
   "dependencies": {
