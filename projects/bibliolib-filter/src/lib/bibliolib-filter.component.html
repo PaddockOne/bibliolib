@@ -368,15 +368,15 @@
       <section class="filter-option-list">
         <span
           class="filter-option-list__item"
-          (click)="addNullOrNotFilter('avec')"
-          [class.selected]="isValueNullOrNotActive('avec')"
+          (click)="addBooleanFilter('avec')"
+          [class.selected]="isValueBooleanActive('avec')"
         >
           <p class="text--md text--regular primary-500">Avec</p>
         </span>
         <span
           class="filter-option-list__item"
-          (click)="addNullOrNotFilter('sans')"
-          [class.selected]="isValueNullOrNotActive('sans')"
+          (click)="addBooleanFilter('sans')"
+          [class.selected]="isValueBooleanActive('sans')"
         >
           <p class="text--md text--regular primary-500">Sans</p>
         </span>
@@ -400,6 +400,26 @@
             <input placeholder="de - à" tuiTextfieldLegacy />
           </tui-input-date-range>
         </section>
+      </section>
+      }
+      <!-- Filter category - trueOrFalse -->
+      @if (filterModalState === 'filter-menu' && currentFilter.type ===
+      'trueOrFalse') {
+      <section class="filter-option-list">
+        <span
+          class="filter-option-list__item"
+          (click)="addBooleanFilter('oui')"
+          [class.selected]="isValueBooleanActive('oui')"
+        >
+          <p class="text--md text--regular primary-500">Oui</p>
+        </span>
+        <span
+          class="filter-option-list__item"
+          (click)="addBooleanFilter('non')"
+          [class.selected]="isValueBooleanActive('non')"
+        >
+          <p class="text--md text--regular primary-500">Non</p>
+        </span>
       </section>
       }
     </section>
