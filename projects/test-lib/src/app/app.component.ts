@@ -1,13 +1,13 @@
-import { Component, WritableSignal, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, WritableSignal, inject, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { TuiRoot } from '@taiga-ui/core';
 import {
   BibliolibDatetimePickerComponent,
   DateTime,
 } from 'bibliolib-datetime-picker';
 import { BibliolibFilterComponent, FilterConfig } from 'bibliolib-filter';
 import { BibliolibGalleryComponent } from 'bibliolib-gallery';
-import { TuiRoot } from '@taiga-ui/core';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -107,6 +107,12 @@ export class AppComponent {
       type: 'nullOrNot',
       values: [],
     },
+    {
+      label: 'Vendu',
+      cat: 'isSold',
+      type: 'trueOrFalse',
+      values: [],
+    },
   ];
   activeFilterList: FilterConfig.FullFilterItemConfig[] = [];
   dateSignal: WritableSignal<DateTime> = signal<DateTime>({
@@ -196,6 +202,12 @@ export class AppComponent {
         label: 'Commentaire',
         cat: 'comment',
         type: 'nullOrNot',
+        values: [],
+      },
+      {
+        label: 'Vendu',
+        cat: 'isSold',
+        type: 'trueOrFalse',
         values: [],
       },
     ];

@@ -1,3 +1,4 @@
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -17,14 +18,13 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { fromEvent, map, throttleTime } from 'rxjs';
-import { FilterConfig } from './filter-config.model';
-import { BibliolibFilterService } from './bibliolib-filter.service';
-import { getAnimations } from './animations';
-import { CommonModule, TitleCasePipe } from '@angular/common';
-import { OnlyNumbersDirective } from './only-numbers.directive';
 import { TuiDayRange } from '@taiga-ui/cdk';
 import { TuiInputDateRangeModule } from '@taiga-ui/legacy';
+import { fromEvent, map, throttleTime } from 'rxjs';
+import { getAnimations } from './animations';
+import { BibliolibFilterService } from './bibliolib-filter.service';
+import { FilterConfig } from './filter-config.model';
+import { OnlyNumbersDirective } from './only-numbers.directive';
 
 @Component({
   selector: 'bibliolib-filter',
@@ -777,7 +777,7 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
    * Ajoute un filtre de type avec/sans à la liste des filtres temporaires en fonction de la valeur spécifiée
    * @param {string} value La valeur du filtre de type avec/sans à ajouter
    */
-  addNullOrNotFilter(value: string) {
+  addBooleanFilter(value: string) {
     if (!this.checkIfFilterIsInTemp()) {
       this.createNewFilter(value);
     } else {
@@ -791,7 +791,7 @@ export class BibliolibFilterComponent implements OnInit, AfterViewInit {
     }
   }
 
-  isValueNullOrNotActive(value: string): boolean {
+  isValueBooleanActive(value: string): boolean {
     return this.tempSelectedFilter.some(
       (filter) =>
         filter.cat === this.currentFilter.cat && filter.values.includes(value)

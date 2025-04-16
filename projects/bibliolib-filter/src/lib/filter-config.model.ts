@@ -2,49 +2,55 @@
  * Module containing configuration interfaces for filter functionality.
  */
 export declare module FilterConfig {
+  /**
+   * Interface representing the configuration for an order item.
+   */
+  interface OrderItemConfig {
     /**
-     * Interface representing the configuration for an order item.
+     * The label of the order item.
      */
-    interface OrderItemConfig {
-        /**
-         * The label of the order item.
-         */
-        label: string;
-
-        /**
-         * The category of the order item.
-         */
-        cat: string;
-    }
+    label: string;
 
     /**
-     * Interface representing the configuration for an order item request.
+     * The category of the order item.
      */
-    interface OrderItemForRequest extends OrderItemConfig {
-        /**
-         * The direction of the order, either ascending ('asc') or descending ('desc').
-         */
-        direction: 'asc' | 'desc';
-    }
+    cat: string;
+  }
 
+  /**
+   * Interface representing the configuration for an order item request.
+   */
+  interface OrderItemForRequest extends OrderItemConfig {
     /**
-     * Interface representing the configuration for a filter item.
+     * The direction of the order, either ascending ('asc') or descending ('desc').
      */
-    interface FilterItemConfig extends OrderItemConfig {
-        /**
-         * The type of the filter item.
-         * Can be one of 'list', 'date', 'nullOrNot', 'numeric_range', or 'check'.
-         */
-        type: 'list' | 'date' | 'nullOrNot' | 'numeric_range' | 'check';
-    }
+    direction: 'asc' | 'desc';
+  }
 
+  /**
+   * Interface representing the configuration for a filter item.
+   */
+  interface FilterItemConfig extends OrderItemConfig {
     /**
-     * Interface representing the full configuration for a filter item.
+     * The type of the filter item.
+     * Can be one of 'list', 'date', 'nullOrNot', 'numeric_range', 'check', 'trueOrFalse'.
      */
-    interface FullFilterItemConfig extends FilterItemConfig {
-        /**
-         * The values associated with the filter item.
-         */
-        values: string[];
-    }
+    type:
+      | 'list'
+      | 'date'
+      | 'nullOrNot'
+      | 'numeric_range'
+      | 'check'
+      | 'trueOrFalse';
+  }
+
+  /**
+   * Interface representing the full configuration for a filter item.
+   */
+  interface FullFilterItemConfig extends FilterItemConfig {
+    /**
+     * The values associated with the filter item.
+     */
+    values: string[];
+  }
 }
